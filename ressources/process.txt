@@ -1,3 +1,5 @@
+- preproccess les structs
+
 - preproccess les opérations
 
 - transformer les fstrings

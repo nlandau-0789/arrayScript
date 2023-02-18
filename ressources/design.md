@@ -30,8 +30,8 @@ string
 
 plusieurs types d'arrays :
     static type => vector
-    static size => array
-    both => tuple
+    static size => tuple
+    both => array
     none => list
 
 other datastructures built-in:

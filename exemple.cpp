@@ -1,11 +1,11 @@
 /*
-Bob possÃ¨de un mur divisÃ© en N sections. Il lui arrive de repeidre Ki sections adjacentes, a savoir les sections Ii Ã  Ji. On demandera, aprÃ¨s R repeintes, de donner le nombre de fois que chaque section Ã  Ã©tÃ© repeinte.
+Bob possède un mur divisé en N sections. Il lui arrive de repeidre Ki sections adjacentes, a savoir les sections Ii à Ji. On demandera, après R repeintes, de donner le nombre de fois que chaque section à été repeinte.
 
-EntrÃ©e:
+Entrée:
 N un entier, le nombre de sections
 R un entier, le nombre de repeintes
 sur les R lignes suivantes :
-Ii et Ji deux entiers sÃ©parÃ©s par un espace : les index de dÃ©but et de fin de l'intervalle repeinte (0-indexed)
+Ii et Ji deux entiers séparés par un espace : les index de début et de fin de l'intervalle repeinte (0-indexed)
 */
 
 struct bad_struct {
@@ -24,7 +24,7 @@ operator { "op2", "goodname2" , 9}(a2):
 
 N = int::input()
 R = int::input()
-sections = static_array(N, int) # N:nombre d'items, int: default_factory (type des Ã©lÃ©ments)
+sections = static_array(N, int) # N:nombre d'items, int: default_factory (type des éléments)
 for i in range(R):
     I, J = int::split::input()
     sections[I]++
