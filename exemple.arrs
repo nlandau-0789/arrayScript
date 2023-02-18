@@ -1,0 +1,28 @@
+/*
+Bob possède un mur divisé en N sections. Il lui arrive de repeidre Ki sections adjacentes, a savoir les sections Ii à Ji. On demandera, après R repeintes, de donner le nombre de fois que chaque section à été repeinte.
+
+Entrée:
+N un entier, le nombre de sections
+R un entier, le nombre de repeintes
+sur les R lignes suivantes :
+Ii et Ji deux entiers séparés par un espace : les index de début et de fin de l'intervalle repeinte (0-indexed)
+*/
+
+
+operator{"op","goodname"}(a, b):
+    tada
+
+operator { "op2", "goodname2" }(a2, b2):
+    tada2
+
+N = int::input()
+R = int::input()
+sections = static_array(N, int) # N:nombre d'items, int: default_factory (type des éléments)
+for i in range(R):
+    I, J = int::split::input()
+    sections[I]++
+    sections[J]--
+sections = + -> sections
+(ghdujioezhduio
+    djeiozdjio)
+
