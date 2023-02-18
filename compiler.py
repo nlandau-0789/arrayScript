@@ -3,7 +3,7 @@ import compiler_steps as cs
 
 def parse(file_name):
     refining_steps = [
-        cs.presolve_operations,
+        cs.presolve_operators,
         cs.presolve_fstrings,
         cs.tokenize,
         cs.presolve_exprs,

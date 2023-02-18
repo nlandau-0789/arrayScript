@@ -1,4 +1,4 @@
-def presolve_operations(bundle):
+def presolve_operators(bundle):
     pass
 
 def presolve_fstrings(bundle):
