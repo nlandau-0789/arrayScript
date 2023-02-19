@@ -9,6 +9,8 @@
 - simplifier les expressions :
 transformer 1 + 2 * 4 en 1 + _operator_mul(2, 4) puis en _operator_add(1, _operator_mul(2, 4))
 
+- transformer les forks
+
 - transformer les piping
 fun1::fun2::fun3(arg1, arg2, ..., ) devient fun1(fun2(fun3(arg1, arg2, ..., )))
 

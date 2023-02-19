@@ -79,7 +79,7 @@ opérators :
 6. ** : power
 7. -+- : join (str -+- list)
 8. -|- : split (str -|- str)
-9. -> : running operation (op -> list)
+9. -> : scan (op -> list)
 10. /> : réductions (op /> list)
 11. ^ : bitwise xor
 12. && : bitwise and
@@ -92,7 +92,7 @@ opérators :
 19. | : dans une fonction : permet d'effectuer la fonction avec le mebre de gauche, puis sur le resultat avec le membre de droite: notament g[1][2] <=> []([](g,1),2) <=> g[1|2]
 
 monopérators :
-1. ! : bitwise not
+1. ~ : bitwise not
 2. not : logic gate
 3. ++ : incrément
 4. -- : décrément

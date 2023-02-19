@@ -1,4 +1,4 @@
-import inspect
+import inspect, pprint
 
 def var_name(var):
     lcls = inspect.stack()[2][0].f_locals
@@ -21,5 +21,5 @@ class bundle(dict):
     def __repr__(self):
         res = "bundle :\n"
         for key, val in self.items():
-            res += f"\t- {key}: {repr(val)}\n"
+            res += f"{key.upper().center(92).replace(' ', '=')}\n{pprint.pformat(val)}\n\n"
         return res
