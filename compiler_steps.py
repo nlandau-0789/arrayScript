@@ -1,5 +1,5 @@
 import re
-from arrayscript import operator
+from arrayscript import operator, Lexer
 
 def presolve_structs(bundle):
     types = [
@@ -60,7 +60,9 @@ def presolve_fstrings(bundle):
     return bundle
 
 def tokenize(bundle):
-    return bundle
+    l = Lexer(bundle)
+    tokens = l.make_tokens()
+    return bundle+tokens
 
 def presolve_exprs(bundle):
     return bundle

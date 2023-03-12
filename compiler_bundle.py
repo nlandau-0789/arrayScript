@@ -9,10 +9,12 @@ def var_name(var):
 
 class bundle(dict):
     def __getattr__(self, name):
-        return self[name]
+        if name in self: return self[name]
+        return "Unknown"
 
     def __iadd__(self, other):
         self[var_name(other)] = other
+        return self
     
     def __add__(self, other):
         self[var_name(other)] = other

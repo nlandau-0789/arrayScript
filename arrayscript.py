@@ -36,7 +36,7 @@ class RadixTree():
         return self.add(key)
     
     def contains(self, key):
-        print(f'searching : {key}')
+        # print(f'searching : {key}')
         if key == "":
             return True
         if not isinstance(key, str):
@@ -47,6 +47,17 @@ class RadixTree():
 
     def __contains__(self, key):
         return self.contains(key)
+
+    @classmethod
+    def test(cls):
+        r = RadixTree()
+        assert ("a" in r) == False
+        r += "abc"
+        assert ("ab" in r) == True
+        assert ("ac" in r) == False
+        r += "acg"
+        assert ("acg" in r) == True
+        print("RadixTree : all tests passed")
 
 class Error:
     def __init__(self, pos_start, pos_end, error_name, details):
@@ -85,45 +96,63 @@ class Position:
     def copy(self):
         return Position(self.idx, self.ln, self.col, self.fn, self.ftxt)
 
-class Token():
-    def __init__(self, type_, value=None):
-        self.type = type_
-        self.value = value
+# class Token():
+#     def __init__(self, type_, value=None):
+#         self.type = type_
+#         self.value = value
     
-    def __repr__(self):
-        if self.value: return f'{self.type}: {self.value}'
-        return f'{self.type}'
+#     def __repr__(self):
+#         if self.value: return f'{self.type}: {self.value}'
+#         return f'{self.type}'
+    
+#     @classmethod
+#     def init_radixtree(cls, bundle):
+#         for op in bundle.operators:
+
+        
 
 class Lexer():
-    def __init__(self, fn, code, bundle):
-        self.fn = fn
-        self.code = code
+    def __init__(self, bundle):
+        self.fn = bundle.fn
+        self.code = bundle.code
         self.bundle = bundle
-        self.pos = Position(-1, 0, -1, fn, code)
-        self.current_char = None
+        self.pos = Position(-1, 0, -1, self.fn, self.code)
+        self.curr_char = None
+        self.known_tokens = {}
+        for i in bundle.operators:
+            self.known_tokens[i.symbol] = i
+        for i in bundle.types:
+            self.known_tokens[i] = i
+        self.known_tokens_tree = RadixTree()
+        for i in self.known_tokens:
+            self.known_tokens_tree += i
         self.advance()
 
     def advance(self):
-        self.pos.advance(self.current_char)
-        self.current_char = self.code[self.pos.idx] if self.pos.idx < len(self.code) else None
+        print(self.pos.idx, self.curr_char)
+        self.pos.advance(self.curr_char)
+        self.curr_char = self.code[self.pos.idx] if self.pos.idx < len(self.code) else None
     
     def make_tokens(self):
         tokens = []
-        vars = []
+        buffer = ""
+        in_comment = False
 
         while self.curr_char != None:
-            if self.curr_char in ' \t':
+            while self.curr_char in " \t":
                 self.advance()
-            elif True:
+            while buffer+self.curr_char in self.known_tokens_tree:
+                print("while : "+buffer+self.curr_char)
+                buffer+=self.curr_char
                 self.advance()
+            if buffer == "":
+                while not self.curr_char in "=":
+                    self.advance()
+                continue
+            tokens.append(self.known_tokens[buffer])
 
         return tokens
 
 if __name__ == '__main__':
-    r = RadixTree()
-    print("a" in r)
-    r += "abc"
-    print("ab" in r)
-    print("ac" in r)
-    r += "acg"
-    print("acg" in r)
+    # RadixTree.test()
+    pass
