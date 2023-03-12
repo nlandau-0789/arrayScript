@@ -1,22 +1,5 @@
 import re
-
-class operator():
-    types = ["monadic", "dyadic"]
-    def __init__(self,symbol,name,priority,args):
-        self.symbol = symbol
-        self.name = f"__{name}_operator_"
-        self.priority = int(priority)
-        if isinstance(args, int):
-            self.type = self.types[args]
-        elif len(args) > 2 or len(args) == 0:
-            raise ValueError("operators can only have one or two arguments")
-        elif len(args) == 1:
-            self.type = "monadic"
-        else :
-            self.type = "dyadic"
-    
-    def __repr__(self):
-        return f"<{self.symbol=}; {self.name=}; {self.priority=}; {self.type=}>".replace("self.","").replace("="," = ")
+from arrayscript import operator
 
 def presolve_structs(bundle):
     types = [
@@ -58,15 +41,19 @@ def presolve_operators(bundle):
         operator("++","incr",5,0),
         operator("--","decr",5,0),
         operator("+.","outer",6,0),
-        # operator("-.","inner",6,1),
+        operator("-.","inner",6,1),
+        operator("o|","reverse",5,0),
+        operator("o-","rotate",4,1),
     ]
-    new_operators = re.findall(r"""operator *\{ *(\"""|'''|"|')(.*?)\1, *(\"""|'''|"|')(.*?)\3 *, *(-?\d+) *\} *\((.*)\)""", bundle.code)
+    new_operators = re.findall(r"""operator *\{ *(\"""|'''|"|')(.*?)\1, *(\"""|'''|"|')(.*?)\3 *, *(-?(:?[0-9]*[.])?[0-9]+) *\} *\((.*)\)""", bundle.code)
     for idx, e in enumerate(new_operators):
         new_operators[idx] = list(e)
-        del new_operators[idx][0:3:2]
+        del new_operators[idx][0]
+        del new_operators[idx][1]
+        del new_operators[idx][3]
         new_operators[idx][3] = tuple(map(str.strip, new_operators[idx][3].split(",")))
         operators.append(operator(*new_operators[idx]))
-    # print(new_operators)
+    print(new_operators)
     return bundle+operators
 
 def presolve_fstrings(bundle):

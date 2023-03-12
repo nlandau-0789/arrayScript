@@ -19,7 +19,7 @@ operator{"op","goodname",5}(a, b):
 operator { "op2", "goodname2" , 9}(a2, b2):
     tada2
 
-operator { "op2", "goodname2" , 9}(a2):
+operator { "op2", "goodname2" , 9.7}(a2):
     tada2
 
 N = int::input()
