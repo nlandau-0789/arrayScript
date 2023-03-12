@@ -20,25 +20,33 @@ class RadixTree():
     def __init__(self):
         self.data = {}
     
-    def __add__(self, key):
+    def add(self, key):
         if not isinstance(key, str):
             raise ValueError(f"[key] (=<{key}>) was not a string")
-        if key is "":
-            return True
+        if key == "":
+            return self
         if key[0] in self.data:
-            self.data[key[0]] += key[1:]
+            self.data[key[0]].add(key[1:])
         else :
             self.data[key[0]] = RadixTree()
-            self.data[key[0]] += key[1:]
+            self.data[key[0]].add(key[1:])
+        return self
     
-    def __contains__(self, key):
-        if key is "":
+    def __add__(self, key):
+        return self.add(key)
+    
+    def contains(self, key):
+        print(f'searching : {key}')
+        if key == "":
             return True
         if not isinstance(key, str):
             raise ValueError(f"[key] (=<{key}>) was not a string")
-        if not key[0] in self.data:
+        if not (key[0] in self.data):
             return False
-        return key[1:] in self.data[key[0]]
+        return self.data[key[0]].contains(key[1:])
+
+    def __contains__(self, key):
+        return self.contains(key)
 
 class Error:
     def __init__(self, pos_start, pos_end, error_name, details):
@@ -110,3 +118,12 @@ class Lexer():
                 self.advance()
 
         return tokens
+
+if __name__ == '__main__':
+    r = RadixTree()
+    print("a" in r)
+    r += "abc"
+    print("ab" in r)
+    print("ac" in r)
+    r += "acg"
+    print("acg" in r)
