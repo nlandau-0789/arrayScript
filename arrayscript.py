@@ -1,22 +1,18 @@
 class operator():
-    types = ["monadic", "dyadic"]
-    def __init__(self,symbol,name,priority,args):
+    def __init__(self,symbol,name,priority,pattern):
         self.symbol = symbol
-        self.name = f"__{name}_operator_"
+        self.name = f"operator_::{name}"
         self.priority = float(priority)
-        if isinstance(args, int):
-            self.type = self.types[args]
-        elif len(args) > 2 or len(args) == 0:
-            raise ValueError("operators can only have one or two arguments")
-        elif len(args) == 1:
-            self.type = "monadic"
-        else :
-            self.type = "dyadic"
+        self.pattern = pattern
     
     def __repr__(self):
-        return f"<{self.symbol=}; {self.name=}; {self.priority=}; {self.type=}>".replace("self.","").replace("="," = ")
+        return f"<{self.symbol=}; {self.name=}; {self.priority=}; {self.pattern=}>".replace("self.","").replace("="," = ")
 
-class RadixTree():
+
+# il faut vérifier l'implémentation
+# car il faut pouvoir déterminer si 
+# le mot est dedans ou si c'est juste le préfix
+class Trie():
     def __init__(self):
         self.data = {}
     
@@ -28,7 +24,7 @@ class RadixTree():
         if key[0] in self.data:
             self.data[key[0]].add(key[1:])
         else :
-            self.data[key[0]] = RadixTree()
+            self.data[key[0]] = Trie()
             self.data[key[0]].add(key[1:])
         return self
     
@@ -50,7 +46,7 @@ class RadixTree():
 
     @classmethod
     def test(cls):
-        r = RadixTree()
+        r = Trie()
         assert ("a" in r) == False
         r += "abc"
         assert ("ab" in r) == True
@@ -123,7 +119,7 @@ class Lexer():
             self.known_tokens[i.symbol] = i
         for i in bundle.types:
             self.known_tokens[i] = i
-        self.known_tokens_tree = RadixTree()
+        self.known_tokens_tree = Trie()
         for i in self.known_tokens:
             self.known_tokens_tree += i
         self.advance()
