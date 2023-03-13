@@ -9,24 +9,24 @@ Ii et Ji deux entiers séparés par un espace : les index de début et de fin de
 */
 
 struct bad_struct {
-    int a,b
+    nums a,b
     list c
 }
 
-operator{"op","goodname",5}(a, b):
+operator{"op","goodname",5}("{a} op {b}"):
     tada
 
-operator { "op2", "goodname2" , 9}(a2, b2):
+operator { "S", "s_combinator" , 0}("S {f} {g} {x}"):
+    lambda x: a2(x, b2(x))
+
+operator { "op2", "goodname2" , 9.7}("op2 {a}"):
     tada2
 
-operator { "op2", "goodname2" , 9.7}(a2):
-    tada2
-
-N = int::input()
-R = int::input()
-sections = static_array(N, int) # N:nombre d'items, int: default_factory (type des éléments)
+N = nums::input()
+R = nums::input()
+sections = static_array(N, nums) # N:nombre d'items, nums: type
 for i in range(R):
-    I, J = int::split::input()
+    I, J = nums::split::input()
     sections[I]++
     sections[J]--
 sections = + -> sections

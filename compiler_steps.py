@@ -61,8 +61,9 @@ def presolve_fstrings(bundle):
 
 def tokenize(bundle):
     l = Lexer(bundle)
-    tokens = l.make_tokens()
-    return bundle+tokens
+    # tokens = l.make_tokens()
+    # return bundle+tokens
+    return bundle
 
 def presolve_exprs(bundle):
     return bundle
