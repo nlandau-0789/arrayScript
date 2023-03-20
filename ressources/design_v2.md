@@ -29,7 +29,6 @@ compilé en c++
 ## built-in datatypes
 - "type", # base mataclass (comme en python)
 - "num", # pas de limite
-- "int", # nb de bits du processeur
 - "u64",
 - "u32",
 - "u16",
@@ -111,7 +110,10 @@ opérators :
 - "[:]","slice",6,"{a} [ {b} : {c} ]",
 - "[::]","slice_step",6,"{a} [ {b} : {c} : {d}]",
 - "[]","map",6,"{a} []" # renvoie un objet de type "map"
-<!--19. | : dans une fonction : permet d'effectuer la fonction avec le mebre de gauche, puis sur le resultat avec le membre de droite: notament g[1][2] <=> []([](g,1),2) <=> g[1|2]-->
+- ">_>","sorted_incr",5,">_> {a}"
+- "<_<","sorted_decr",5,"<_< {a}"
+- "in","contains",0,"{a} in {b}"
+<!--19. | : dans une fonction : permet d'effectuer la fonction avec le membre de gauche, puis sur le resultat avec le membre de droite: notament g[1][2] <=> []([](g,1),2) <=> g[1|2]-->
 
 
 

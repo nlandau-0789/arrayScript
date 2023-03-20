@@ -5,7 +5,6 @@ def presolve_structs(bundle):
     types = [
         "type", # base mataclass (comme en python)
         "num", # pas de limite
-        "int", # nb de bits du processeur
         "u64",
         "u32",
         "u16",
@@ -64,6 +63,7 @@ def presolve_operators(bundle):
         operator("and","and",0,"{a} and {b}"),
         operator("or","or",0,"{a} or {b}"),
         operator("xor","xor",0,"{a} xor {b}"),
+        operator("in","contains",0,"{a} in {b}"),
         operator("~","bitnot",5,"~ {a}"),
         operator("not","not",0,"not {a}"),
         operator("++","incr",5,"{a} ++"),
@@ -78,7 +78,9 @@ def presolve_operators(bundle):
         operator("[]","item",6,"{a} [ {+} ]"), # special symbol "+" (cf regex)
         operator("[:]","slice",6,"{a} [ {b} : {c} ]"),
         operator("[::]","slice_step",6,"{a} [ {b} : {c} : {d}]"),
-        operator("[]","map",6,"{a} []") # renvoie un objet de type "map"
+        operator("[]","map",6,"{a} []"), # renvoie un objet de type "map"
+        operator(">_>","sorted_incr",5,">_> {a}"),
+        operator("<_<","sorted_decr",5,"<_< {a}")
     ]
     new_operators = re.findall(r"""operator *\{ *(\"""|'''|"|')(.*?)\1, *(\"""|'''|"|')(.*?)\3 *, *(-?(:?[0-9]*[.])?[0-9]+) *\} *\((.*)\)""", bundle.code)
     for idx, e in enumerate(new_operators):
