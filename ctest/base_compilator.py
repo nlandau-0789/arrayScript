@@ -1,0 +1,150 @@
+import re
+
+class type_():
+    def __init__(self, name):
+        self.__name__ = "type_"+name
+        self.tokenizer = f"""t_{self.__name__} = r'''{re.escape(name)}'''"""
+        self.keyword = name
+
+types = [
+    type_('type'), # base mataclass (comme en python)
+    type_('num'), # pas de limite
+    type_('any'), # pour les déclarations de fonctions
+    type_('u64'), 
+    type_('u32'), 
+    type_('u16'), 
+    type_('u8'), 
+    type_('i64'), 
+    type_('i32'), 
+    type_('i16'), 
+    type_('i8'), 
+    type_('f32'), 
+    type_('f64'), 
+    type_('str'), # immutable
+    type_('list'), # dynamic length, dynamic type
+    type_('tuple'), # static length, dynamic type
+    type_('array'), # static length, static type
+    type_('vector'), # dynamic length, static type
+    type_('dict'), 
+    type_('generator'), 
+    type_('linked_list'), 
+    type_('doubly_linked_list'), 
+    type_('deque'), 
+    type_('heap'), 
+    type_('fibonacci_heap'), 
+    type_('tree'), # arbre enraciné normal
+    type_('trie'), 
+    type_('stack'), 
+    type_('queue'), 
+    type_('binary_search_tree'), 
+    type_('bitset'), 
+    type_('set'), 
+    type_('map'), # active le ranked polymorphism
+    type_('range')
+]
+
+literals = ",()[]:"
+
+class NUM():
+    tokenizer = r"""
+def t_NUM(t):
+    r"-?\d+"
+    t.value = int(t.value)
+    return t"""
+
+class FLOAT():
+    tokenizer = r"""
+def t_FLOAT(t):
+    r"-?\d+\.\d+"
+    t.value = float(t.value)
+    return t"""
+
+class STRING_3SQ():
+    match_string = r"\'\'\'([^\\\n]|(\\.))*?\'\'\'"
+    tokenizer = rf'''
+def t_STRING_3SQ(t):
+    r"""{match_string}"""
+    return t'''
+
+class STRING_3DQ():
+    match_string = r'\"\"\"([^\\\n]|(\\.))*?\"\"\"'
+    tokenizer = rf"""
+def t_STRING_3DQ(t):
+    r'''{match_string}'''
+    return t"""
+
+class STRING_SQ():
+    match_string = r"\'([^\\\n]|(\\.))*?\'"
+    tokenizer = rf'''
+def t_STRING_SQ(t):
+    r"""{match_string}"""
+    return t'''
+
+class STRING_DQ():
+    match_string = r'\"([^\\\n]|(\\.))*?\"'
+    tokenizer = rf'''
+def t_STRING_DQ(t):
+    r"""{match_string}"""
+    return t'''
+
+consts_types = [
+    NUM,
+    FLOAT,
+    STRING_3SQ,
+    STRING_3DQ,
+    STRING_SQ,
+    STRING_DQ,
+]
+
+class operator():
+    def __init__(self,symbol,name,priority,pattern):
+        self.symbol = symbol
+        self.__name__ = f"operator_{name}"
+        self.priority = float(priority)
+        self.pattern = pattern
+        self.tokenizer = f"""t_{self.__name__} = r'''{re.escape(symbol)}'''"""
+        self.keyword = symbol
+    
+    def __repr__(self):
+        return f"<{self.symbol=}; {self.__name__=}; {self.priority=}; {self.pattern=}>".replace("self.","").replace("="," = ")
+
+operators = [
+    operator("+","add",1,"{a} + {b}"),
+    operator("-","sub",1,"{a} - {b}"),
+    operator("*","mul",2,"{a} * {b}"),
+    operator("//","div",2,"{a} / {b}"),
+    operator("/","trudiv",2,"{a} // {b}"),
+    operator("**","pow",3,"{a} ** {b}"),
+    operator("-+-","join",1,"{a} -+- {b}"),
+    operator("-|-","split",1,"{a} -|- {b}"),
+    operator("->","scan",4,"{a} -> {b}"),
+    operator("/>","reduc",4,"{a} /> {b}"),
+    operator("&&","bitand",1,"{a} && {b}"),
+    operator("||","bitor",1,"{a} || {b}"),
+    operator("^","bitxor",1,"{a} ^ {b}"),
+    operator("<<","bitshiftleft",1,"{a} << {b}"),
+    operator(">>","bitshiftright",1,"{a} >> {b}"),
+    operator("and","and",0,"{a} and {b}"),
+    operator("or","or",0,"{a} or {b}"),
+    operator("xor","xor",0,"{a} xor {b}"),
+    operator("in","contains",0,"{a} in {b}"),
+    operator("~","bitnot",5,"~ {a}"),
+    operator("not","not",0,"not {a}"),
+    operator("++","incr",5,"{a} ++"),
+    operator("--","decr",5,"{a} --"),
+    operator("+.","outer",1,"{a} +. {b} {c}"),
+    operator("-.","inner",1,"{a} {b} -. {c} {d}"),
+    operator("<|>","reverse",5,"o| {a}"),
+    operator("-o-","rotate",4,"{a} o- {b}"),
+    operator(".","apply",4,"{a} . {b}"),
+    operator("::","compose",7,"{a} :: {b}"),
+    # operator("()","call",6,"{a} ( {*} )"), # special symbol "*" (cf regex)
+    # operator("[]","item",6,"{a} [ {+} ]"), # special symbol "+" (cf regex)
+    # operator("[:]","slice",6,"{a} [ {b} : {c} ]"),
+    # operator("[::]","slice_step",6,"{a} [ {b} : {c} : {d}]"),
+    operator("[]","map",6,"{a} []"), # renvoie un objet de type "map"
+    operator(">_>","sorted_incr",5,">_> {a}"),
+    operator("<_<","sorted_decr",5,"<_< {a}")
+]
+
+tokens = consts_types + operators + types

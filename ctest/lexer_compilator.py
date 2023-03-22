@@ -1,0 +1,49 @@
+from base_compilator import tokens, literals
+from pprint import pprint
+
+def isAttrAlpha(s, attr, exceptions = []):
+    if not getattr(s, attr, None):
+        return False
+    t = getattr(s, attr)
+    # print(t)
+    t = "".join(filter(lambda x: not x in exceptions, t))
+    # print(t)
+    return all(map(str.isalpha, t))
+
+compilator = """from ply import lex
+from pprint import pprint
+
+tokens = (""" + ", ".join(map(lambda x: repr(x.__name__), tokens)) + """, 'VAR')
+""" + "\n".join(map(lambda x: x.tokenizer, tokens)) + f"""
+
+reserved = {{{", ".join(map(lambda x: repr(x.keyword)+": "+repr(x.__name__),filter(lambda x: isAttrAlpha(x, "keyword", "_"), tokens)))}}}
+
+def t_VAR(t):
+   r'[a-zA-Z][a-zA-Z_\d]*'
+   t.type = reserved.get(t.value,'VAR')
+   return t
+
+literals = {repr(literals)}
+""" + r"""
+
+def t_newline(t):
+    r'\n+'
+    t.lexer.lineno += len(t.value)
+
+t_ignore  = ' \t'
+
+def t_error(t):
+    print(f"Illegal character {t.value[0]} at line {t.lexer.lineno}")
+    t.lexer.skip(1)
+
+lexer = lex.lex()
+
+while True:
+    inp = input(">>> ")
+    if inp in {"exit", "quit", "kill"}:
+        break
+    lex.input(inp)
+    pprint(list(lexer))"""
+
+with open("lexer.py", "w", encoding="utf-8") as f:
+    f.write(compilator)
