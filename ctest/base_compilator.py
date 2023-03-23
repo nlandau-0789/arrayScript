@@ -144,7 +144,15 @@ operators = [
     # operator("[::]","slice_step",6,"{a} [ {b} : {c} : {d}]"),
     operator("[]","map",6,"{a} []"), # renvoie un objet de type "map"
     operator(">_>","sorted_incr",5,">_> {a}"),
-    operator("<_<","sorted_decr",5,"<_< {a}")
+    operator("<_<","sorted_decr",5,"<_< {a}"),
+    operator("<", "less_than",0,"{a} < {b}"),
+    operator("<=", "less_than_equals",0,"{a} <= {b}"),
+    operator(">", "greater_than",0,"{a} > {b}"),
+    operator(">=", "greater_than_equals",0,"{a} >= {b}"),
+    operator("==", "equals",0,"{a} == {b}"),
+    operator("!=", "not_equals",0,"{a} != {b}"),
+    operator("<?", "smallest",0,"{a} <? {b}"),
+    operator(">?", "greatest",0,"{a} >? {b}"),
 ]
 
 tokens = consts_types + operators + types
