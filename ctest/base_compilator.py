@@ -153,6 +153,8 @@ operators = [
     operator("!=", "not_equals",0,"{a} != {b}"),
     operator("<?", "smallest",0,"{a} <? {b}"),
     operator(">?", "greatest",0,"{a} >? {b}"),
+    # operator("Ov", "floor",5,"Ov {a}"),
+    # operator("O^", "ceil",5,"O^ {a}"),
 ]
 
 tokens = consts_types + operators + types
