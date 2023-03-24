@@ -1,4 +1,5 @@
 from base_compilator import tokens, literals
+import extra_compile_data
 from pprint import pprint
 
 def isAttrAlpha(s, attr, exceptions = []):
@@ -10,7 +11,10 @@ def isAttrAlpha(s, attr, exceptions = []):
     # print(t)
     return all(map(str.isalpha, t))
 
-compilator = """from ply import lex
+def get_compilator(code):
+    tokens.extend(extra_compile_data.get_new_structs(code))
+    tokens.extend(extra_compile_data.get_new_operators(code))
+    return """from ply import lex
 from pprint import pprint
 
 tokens = (""" + ", ".join(map(lambda x: repr(x.__name__), tokens)) + """, 'VAR')
@@ -45,5 +49,3 @@ while True:
     lex.input(inp)
     pprint(list(lexer))"""
 
-with open("lexer.py", "w", encoding="utf-8") as f:
-    f.write(compilator)

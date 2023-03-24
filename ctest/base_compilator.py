@@ -5,6 +5,9 @@ class type_():
         self.__name__ = "type_"+name
         self.tokenizer = f"""t_{self.__name__} = r'''{re.escape(name)}'''"""
         self.keyword = name
+    
+    def __repr__(self):
+        return self.__name__
 
 types = [
     type_('type'), # base mataclass (comme en python)
