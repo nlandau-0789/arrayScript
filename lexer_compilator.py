@@ -42,10 +42,15 @@ def t_error(t):
 
 lexer = lex.lex()
 
-while True:
-    inp = input(">>> ")
-    if inp in {"exit", "quit", "kill"}:
-        break
-    lex.input(inp)
-    pprint(list(lexer))"""
+# while True:
+#     inp = input(">>> ")
+#     if inp in {"exit", "quit", "kill"}:
+#         break
+#     lex.input(inp)
+#     pprint(list(lexer))
+
+lex.input('''"""+code+"""''')
+pprint(list(lexer))
+
+"""
 

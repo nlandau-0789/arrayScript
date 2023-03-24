@@ -46,7 +46,7 @@ types = [
     type_('range')
 ]
 
-literals = ",()[]:"
+literals = ",()[]{}:="
 
 class NUM():
     tokenizer = r"""
@@ -141,6 +141,7 @@ operators = [
     operator("-o-","rotate",4,"{a} o- {b}"),
     operator(".","apply",4,"{a} . {b}"),
     operator("::","compose",7,"{a} :: {b}"),
+    operator("..","over",7,"{a} .. {b}"),
     # operator("()","call",6,"{a} ( {*} )"), # special symbol "*" (cf regex)
     # operator("[]","item",6,"{a} [ {+} ]"), # special symbol "+" (cf regex)
     # operator("[:]","slice",6,"{a} [ {b} : {c} ]"),

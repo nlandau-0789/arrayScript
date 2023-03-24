@@ -8,7 +8,7 @@
 
 
 struct bad_struct :
-    nums a,b
+    num a,b
     list c
 
 operator{"op","goodname",5}("{a} op {b}"):
@@ -23,11 +23,11 @@ operator { "op2", "goodname2" , 9.7}("op2 {a}"):
 func dummy(num ):
     pass
 
-N = nums::input()
-R = nums::input()
-sections = static_array(N, nums) # N:nombre d'items, nums: type
+N = num::input()
+R = num::input()
+sections = tuple(N, num) # N:nombre d'items, num: type
 for i in range(R):
-    I, J = nums::split::input()
+    I, J = num..split::input()
     sections[I]++
     sections[J]--
 sections = + -> sections

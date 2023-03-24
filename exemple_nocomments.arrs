@@ -1,0 +1,25 @@
+struct bad_struct :
+    num a,b
+    list c
+
+operator{"op","goodname",5}("{a} op {b}"):
+    pass
+
+operator { "S", "s_combinator" , 0}("S {f} {g} {x}"):
+    lambda x: f(x, g(x))
+
+operator { "op2", "goodname2" , 9.7}("op2 {a}"):
+    pass
+
+func dummy(num ):
+    pass
+
+N = num::input()
+R = num::input()
+sections = tuple(N, num)
+for i in range(R):
+    I, J = num..split::input()
+    sections[I]++
+    sections[J]--
+sections = + -> sections
+output(" " -+- sections)
