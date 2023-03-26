@@ -49,8 +49,5 @@ lexer = lex.lex()
 #     lex.input(inp)
 #     pprint(list(lexer))
 
-lex.input('''"""+code+"""''')
-pprint(list(lexer))
-
 """
 

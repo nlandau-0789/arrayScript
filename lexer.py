@@ -1,7 +1,7 @@
 from ply import lex
 from pprint import pprint
 
-tokens = ('NUM', 'FLOAT', 'STRING_3SQ', 'STRING_3DQ', 'STRING_SQ', 'STRING_DQ', 'operator_add', 'operator_sub', 'operator_mul', 'operator_div', 'operator_trudiv', 'operator_pow', 'operator_join', 'operator_split', 'operator_scan', 'operator_reduc', 'operator_bitand', 'operator_bitor', 'operator_bitxor', 'operator_bitshiftleft', 'operator_bitshiftright', 'operator_and', 'operator_or', 'operator_xor', 'operator_contains', 'operator_bitnot', 'operator_not', 'operator_incr', 'operator_decr', 'operator_outer', 'operator_inner', 'operator_reverse', 'operator_rotate', 'operator_apply', 'operator_compose', 'operator_over', 'operator_map', 'operator_sorted_incr', 'operator_sorted_decr', 'operator_less_than', 'operator_less_than_equals', 'operator_greater_than', 'operator_greater_than_equals', 'operator_equals', 'operator_not_equals', 'operator_smallest', 'operator_greatest', 'type_type', 'type_num', 'type_any', 'type_u64', 'type_u32', 'type_u16', 'type_u8', 'type_i64', 'type_i32', 'type_i16', 'type_i8', 'type_f32', 'type_f64', 'type_str', 'type_list', 'type_tuple', 'type_array', 'type_vector', 'type_dict', 'type_generator', 'type_linked_list', 'type_doubly_linked_list', 'type_deque', 'type_heap', 'type_fibonacci_heap', 'type_tree', 'type_trie', 'type_stack', 'type_queue', 'type_binary_search_tree', 'type_bitset', 'type_set', 'type_map', 'type_range', 'type_bad_struct', 'operator_goodname', 'operator_s_combinator', 'operator_goodname2', 'VAR')
+tokens = ('NUM', 'FLOAT', 'STRING_3SQ', 'STRING_3DQ', 'STRING_SQ', 'STRING_DQ', 'for', 'while', 'if', 'else', 'elif', 'func', 'struct', 'operator', 'return', 'break', 'continue', 'del', 'true', 'false', 'lambda', 'pass', 'operator_add', 'operator_sub', 'operator_mul', 'operator_div', 'operator_trudiv', 'operator_pow', 'operator_join', 'operator_split', 'operator_scan', 'operator_reduc', 'operator_bitand', 'operator_bitor', 'operator_bitxor', 'operator_bitshiftleft', 'operator_bitshiftright', 'operator_and', 'operator_or', 'operator_xor', 'operator_contains', 'operator_bitnot', 'operator_not', 'operator_incr', 'operator_decr', 'operator_outer', 'operator_inner', 'operator_reverse', 'operator_rotate', 'operator_apply', 'operator_compose', 'operator_over', 'operator_map', 'operator_sorted_incr', 'operator_sorted_decr', 'operator_less_than', 'operator_less_than_equals', 'operator_greater_than', 'operator_greater_than_equals', 'operator_equals', 'operator_not_equals', 'operator_smallest', 'operator_greatest', 'type_type', 'type_num', 'type_any', 'type_u64', 'type_u32', 'type_u16', 'type_u8', 'type_i64', 'type_i32', 'type_i16', 'type_i8', 'type_f32', 'type_f64', 'type_str', 'type_list', 'type_tuple', 'type_array', 'type_vector', 'type_dict', 'type_generator', 'type_linked_list', 'type_doubly_linked_list', 'type_deque', 'type_heap', 'type_fibonacci_heap', 'type_tree', 'type_trie', 'type_stack', 'type_queue', 'type_binary_search_tree', 'type_bitset', 'type_set', 'type_map', 'type_range', 'type_bad_struct', 'operator_goodname', 'operator_s_combinator', 'operator_goodname2', 'VAR')
 
 def t_NUM(t):
     r"-?\d+"
@@ -28,6 +28,22 @@ def t_STRING_SQ(t):
 def t_STRING_DQ(t):
     r"""\"([^\\\n]|(\\.))*?\""""
     return t
+t_for = r'''for'''
+t_while = r'''while'''
+t_if = r'''if'''
+t_else = r'''else'''
+t_elif = r'''elif'''
+t_func = r'''func'''
+t_struct = r'''struct'''
+t_operator = r'''operator'''
+t_return = r'''return'''
+t_break = r'''break'''
+t_continue = r'''continue'''
+t_del = r'''del'''
+t_true = r'''true'''
+t_false = r'''false'''
+t_lambda = r'''lambda'''
+t_pass = r'''pass'''
 t_operator_add = r'''\+'''
 t_operator_sub = r'''\-'''
 t_operator_mul = r'''\*'''
@@ -108,14 +124,14 @@ t_operator_goodname = r'''op'''
 t_operator_s_combinator = r'''S'''
 t_operator_goodname2 = r'''op2'''
 
-reserved = {'and': 'operator_and', 'or': 'operator_or', 'xor': 'operator_xor', 'in': 'operator_contains', 'not': 'operator_not', 'type': 'type_type', 'num': 'type_num', 'any': 'type_any', 'str': 'type_str', 'list': 'type_list', 'tuple': 'type_tuple', 'array': 'type_array', 'vector': 'type_vector', 'dict': 'type_dict', 'generator': 'type_generator', 'linked_list': 'type_linked_list', 'doubly_linked_list': 'type_doubly_linked_list', 'deque': 'type_deque', 'heap': 'type_heap', 'fibonacci_heap': 'type_fibonacci_heap', 'tree': 'type_tree', 'trie': 'type_trie', 'stack': 'type_stack', 'queue': 'type_queue', 'binary_search_tree': 'type_binary_search_tree', 'bitset': 'type_bitset', 'set': 'type_set', 'map': 'type_map', 'range': 'type_range', 'bad_struct': 'type_bad_struct', 'op': 'operator_goodname', 'S': 'operator_s_combinator'}
+reserved = {'for': 'for', 'while': 'while', 'if': 'if', 'else': 'else', 'elif': 'elif', 'func': 'func', 'struct': 'struct', 'operator': 'operator', 'return': 'return', 'break': 'break', 'continue': 'continue', 'del': 'del', 'true': 'true', 'false': 'false', 'lambda': 'lambda', 'pass': 'pass', 'and': 'operator_and', 'or': 'operator_or', 'xor': 'operator_xor', 'in': 'operator_contains', 'not': 'operator_not', 'type': 'type_type', 'num': 'type_num', 'any': 'type_any', 'str': 'type_str', 'list': 'type_list', 'tuple': 'type_tuple', 'array': 'type_array', 'vector': 'type_vector', 'dict': 'type_dict', 'generator': 'type_generator', 'linked_list': 'type_linked_list', 'doubly_linked_list': 'type_doubly_linked_list', 'deque': 'type_deque', 'heap': 'type_heap', 'fibonacci_heap': 'type_fibonacci_heap', 'tree': 'type_tree', 'trie': 'type_trie', 'stack': 'type_stack', 'queue': 'type_queue', 'binary_search_tree': 'type_binary_search_tree', 'bitset': 'type_bitset', 'set': 'type_set', 'map': 'type_map', 'range': 'type_range', 'bad_struct': 'type_bad_struct', 'op': 'operator_goodname', 'S': 'operator_s_combinator'}
 
 def t_VAR(t):
    r'[a-zA-Z][a-zA-Z_\d]*'
    t.type = reserved.get(t.value,'VAR')
    return t
 
-literals = ',()[]{}:='
+literals = ',()[]{}:=#'
 
 
 def t_newline(t):
@@ -136,32 +152,4 @@ lexer = lex.lex()
 #         break
 #     lex.input(inp)
 #     pprint(list(lexer))
-
-lex.input('''struct bad_struct :
-    num a,b
-    list c
-
-operator{"op","goodname",5}("{a} op {b}"):
-    pass
-
-operator { "S", "s_combinator" , 0}("S {f} {g} {x}"):
-    lambda x: f(x, g(x))
-
-operator { "op2", "goodname2" , 9.7}("op2 {a}"):
-    pass
-
-func dummy(num ):
-    pass
-
-N = num::input()
-R = num::input()
-sections = tuple(N, num)
-for i in range(R):
-    I, J = num..split::input()
-    sections[I]++
-    sections[J]--
-sections = + -> sections
-output(" " -+- sections)
-''')
-pprint(list(lexer))
 

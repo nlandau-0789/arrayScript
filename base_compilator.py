@@ -1,5 +1,33 @@
 import re
 
+class keyword():
+    def __init__(self, name):
+        self.__name__ = name
+        self.tokenizer = f"""t_{self.__name__} = r'''{re.escape(name)}'''"""
+        self.keyword = name
+    
+    def __repr__(self):
+        return self.__name__
+
+keywords = [
+    keyword("for"),
+    keyword("while"),
+    keyword("if"),
+    keyword("else"),
+    keyword("elif"),
+    keyword("func"),
+    keyword("struct"),
+    keyword("operator"),
+    keyword("return"),
+    keyword("break"),
+    keyword("continue"),
+    keyword("del"),
+    keyword("true"),
+    keyword("false"),
+    keyword("lambda"),
+    keyword("pass"),
+]
+
 class type_():
     def __init__(self, name):
         self.__name__ = "type_"+name
@@ -46,7 +74,7 @@ types = [
     type_('range')
 ]
 
-literals = ",()[]{}:="
+literals = ",()[]{}:=#"
 
 class NUM():
     tokenizer = r"""
@@ -161,4 +189,4 @@ operators = [
     # operator("O^", "ceil",5,"O^ {a}"),
 ]
 
-tokens = consts_types + operators + types
+tokens = consts_types + keywords + operators + types
