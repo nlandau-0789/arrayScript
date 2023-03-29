@@ -31,7 +31,6 @@ literals = {repr(literals)}
 
 def t_comment(t):"""+r"""
         r'(/\*(.|\n)*?\*/)|(\#.*)'
-        print(repr(t.value), t.value.count('\n'))
         t.lexer.lineno += t.value.count('\n')
 
 """ + r"""
