@@ -230,7 +230,9 @@ operators = [
     # operator("O^", "ceil",5,"O^ {a}"),
 ]
 
-tokens = consts_types + keywords + operators + types
+funcs = []
+
+tokens = consts_types + keywords + operators + types + funcs
 
 # from pprint import pprint
 # pprint([(x.pattern, x.return_value) for x in operators])

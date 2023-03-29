@@ -135,7 +135,6 @@ literals = ',()[]{}:='
 
 def t_comment(t):
         r'(/\*(.|\n)*?\*/)|(\#.*)'
-        print(repr(t.value), t.value.count('\n'))
         t.lexer.lineno += t.value.count('\n')
 
 
@@ -158,4 +157,390 @@ lexer = lex.lex()
 #         break
 #     lex.input(inp)
 #     pprint(list(lexer))
+
+
+
+def p_operator_add(p):
+    '''
+    expr : expr operator_add expr
+    '''
+    p[0] = (p[2], p[1], p[3])
+
+
+def p_operator_sub(p):
+    '''
+    expr : expr operator_sub expr
+    '''
+    p[0] = (p[2], p[1], p[3])
+
+
+def p_operator_mul(p):
+    '''
+    expr : expr operator_mul expr
+    '''
+    p[0] = (p[2], p[1], p[3])
+
+
+def p_operator_div(p):
+    '''
+    expr : expr operator_div expr
+    '''
+    p[0] = (p[2], p[1], p[3])
+
+
+def p_operator_trudiv(p):
+    '''
+    expr : expr operator_trudiv expr
+    '''
+    p[0] = (p[2], p[1], p[3])
+
+
+def p_operator_pow(p):
+    '''
+    expr : expr operator_pow expr
+    '''
+    p[0] = (p[2], p[1], p[3])
+
+
+def p_operator_join(p):
+    '''
+    expr : expr operator_join expr
+    '''
+    p[0] = (p[2], p[1], p[3])
+
+
+def p_operator_split(p):
+    '''
+    expr : expr operator_split expr
+    '''
+    p[0] = (p[2], p[1], p[3])
+
+
+def p_operator_scan(p):
+    '''
+    expr : expr operator_scan expr
+    '''
+    p[0] = (p[2], p[1], p[3])
+
+
+def p_operator_reduc(p):
+    '''
+    expr : expr operator_reduc expr
+    '''
+    p[0] = (p[2], p[1], p[3])
+
+
+def p_operator_bitand(p):
+    '''
+    expr : expr operator_bitand expr
+    '''
+    p[0] = (p[2], p[1], p[3])
+
+
+def p_operator_bitor(p):
+    '''
+    expr : expr operator_bitor expr
+    '''
+    p[0] = (p[2], p[1], p[3])
+
+
+def p_operator_bitxor(p):
+    '''
+    expr : expr operator_bitxor expr
+    '''
+    p[0] = (p[2], p[1], p[3])
+
+
+def p_operator_bitshiftleft(p):
+    '''
+    expr : expr operator_bitshiftleft expr
+    '''
+    p[0] = (p[2], p[1], p[3])
+
+
+def p_operator_bitshiftright(p):
+    '''
+    expr : expr operator_bitshiftright expr
+    '''
+    p[0] = (p[2], p[1], p[3])
+
+
+def p_operator_and(p):
+    '''
+    expr : expr operator_and expr
+    '''
+    p[0] = (p[2], p[1], p[3])
+
+
+def p_operator_or(p):
+    '''
+    expr : expr operator_or expr
+    '''
+    p[0] = (p[2], p[1], p[3])
+
+
+def p_operator_xor(p):
+    '''
+    expr : expr operator_xor expr
+    '''
+    p[0] = (p[2], p[1], p[3])
+
+
+def p_operator_contains(p):
+    '''
+    expr : expr operator_contains expr
+    '''
+    p[0] = (p[2], p[1], p[3])
+
+
+def p_operator_bitnot(p):
+    '''
+    expr : operator_bitnot expr
+    '''
+    p[0] = (p[1], p[2])
+
+
+def p_operator_not(p):
+    '''
+    expr : operator_not expr
+    '''
+    p[0] = (p[1], p[2])
+
+
+def p_operator_incr(p):
+    '''
+    expr : expr operator_incr
+    '''
+    p[0] = (p[2], p[1])
+
+
+def p_operator_decr(p):
+    '''
+    expr : expr operator_decr
+    '''
+    p[0] = (p[2], p[1])
+
+
+def p_operator_outer(p):
+    '''
+    expr : expr operator_outer expr expr
+    '''
+    p[0] = (p[2], p[1], p[3], p[4])
+
+
+def p_operator_inner(p):
+    '''
+    expr : expr expr operator_inner expr expr
+    '''
+    p[0] = (p[3], p[1], p[2], p[4], p[5])
+
+
+def p_operator_reverse(p):
+    '''
+    expr : operator_reverse expr
+    '''
+    p[0] = (p[1], p[2])
+
+
+def p_operator_rotate(p):
+    '''
+    expr : expr operator_rotate expr
+    '''
+    p[0] = (p[2], p[1], p[3])
+
+
+def p_operator_apply(p):
+    '''
+    expr : expr operator_apply expr
+    '''
+    p[0] = (p[2], p[1], p[3])
+
+
+def p_operator_compose(p):
+    '''
+    expr : expr operator_compose expr
+    '''
+    p[0] = (p[2], p[1], p[3])
+
+
+def p_operator_over(p):
+    '''
+    expr : expr operator_over expr
+    '''
+    p[0] = (p[2], p[1], p[3])
+
+
+def p_operator_map(p):
+    '''
+    expr : expr operator_map
+    '''
+    p[0] = (p[2], p[1])
+
+
+def p_operator_sorted_incr(p):
+    '''
+    expr : operator_sorted_incr expr
+    '''
+    p[0] = (p[1], p[2])
+
+
+def p_operator_sorted_decr(p):
+    '''
+    expr : operator_sorted_decr expr
+    '''
+    p[0] = (p[1], p[2])
+
+
+def p_operator_less_than(p):
+    '''
+    expr : expr operator_less_than expr
+    '''
+    p[0] = (p[2], p[1], p[3])
+
+
+def p_operator_less_than_equals(p):
+    '''
+    expr : expr operator_less_than_equals expr
+    '''
+    p[0] = (p[2], p[1], p[3])
+
+
+def p_operator_greater_than(p):
+    '''
+    expr : expr operator_greater_than expr
+    '''
+    p[0] = (p[2], p[1], p[3])
+
+
+def p_operator_greater_than_equals(p):
+    '''
+    expr : expr operator_greater_than_equals expr
+    '''
+    p[0] = (p[2], p[1], p[3])
+
+
+def p_operator_equals(p):
+    '''
+    expr : expr operator_equals expr
+    '''
+    p[0] = (p[2], p[1], p[3])
+
+
+def p_operator_not_equals(p):
+    '''
+    expr : expr operator_not_equals expr
+    '''
+    p[0] = (p[2], p[1], p[3])
+
+
+def p_operator_smallest(p):
+    '''
+    expr : expr operator_smallest expr
+    '''
+    p[0] = (p[2], p[1], p[3])
+
+
+def p_operator_greatest(p):
+    '''
+    expr : expr operator_greatest expr
+    '''
+    p[0] = (p[2], p[1], p[3])
+
+
+def p_operator_goodname(p):
+    '''
+    expr : expr operator_goodname expr
+    '''
+    p[0] = (p[2], p[1], p[3])
+
+
+def p_operator_s_combinator(p):
+    '''
+    expr : operator_s_combinator expr expr expr
+    '''
+    p[0] = (p[1], p[2], p[3], p[4])
+
+
+def p_operator_goodname2(p):
+    '''
+    expr : operator_goodname2 expr
+    '''
+    p[0] = (p[1], p[2])
+
+
+
+def p_expr(p):
+    '''
+    expr : const_val 
+         | VAR
+    '''
+    p[0] = p[1]
+
+def p_single_argument(p):
+    '''
+    arguments : expr
+    '''
+    p[0] = [p[1]]
+
+def p_arguments(p):
+    '''
+    arguments : arguments ',' arguments
+    '''
+    p[0] = p[1]+p[3]
+    
+
+def p_const_val(p):
+    '''
+    const_val : NUM
+              | FLOAT
+              | STRING_3SQ
+              | STRING_3DQ
+              | STRING_SQ
+              | STRING_DQ
+    '''
+    p[0] = p[1]
+
+def p_return_val(p):
+    '''
+    return_val : type_type '(' arguments ')'
+               | type_num '(' arguments ')'
+               | type_any '(' arguments ')'
+               | type_u64 '(' arguments ')'
+               | type_u32 '(' arguments ')'
+               | type_u16 '(' arguments ')'
+               | type_u8 '(' arguments ')'
+               | type_i64 '(' arguments ')'
+               | type_i32 '(' arguments ')'
+               | type_i16 '(' arguments ')'
+               | type_i8 '(' arguments ')'
+               | type_f32 '(' arguments ')'
+               | type_f64 '(' arguments ')'
+               | type_str '(' arguments ')'
+               | type_list '(' arguments ')'
+               | type_tuple '(' arguments ')'
+               | type_array '(' arguments ')'
+               | type_vector '(' arguments ')'
+               | type_dict '(' arguments ')'
+               | type_generator '(' arguments ')'
+               | type_linked_list '(' arguments ')'
+               | type_doubly_linked_list '(' arguments ')'
+               | type_deque '(' arguments ')'
+               | type_heap '(' arguments ')'
+               | type_fibonacci_heap '(' arguments ')'
+               | type_tree '(' arguments ')'
+               | type_trie '(' arguments ')'
+               | type_stack '(' arguments ')'
+               | type_queue '(' arguments ')'
+               | type_binary_search_tree '(' arguments ')'
+               | type_bitset '(' arguments ')'
+               | type_set '(' arguments ')'
+               | type_map '(' arguments ')'
+               | type_range '(' arguments ')'
+    '''
+    p[0] = ()
+
+def p_error(p):
+    print(f"Syntax error at line {p.lexer.lineno}")
+
+parser = yacc.yacc()
 

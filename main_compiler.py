@@ -8,8 +8,8 @@ with open("exemple.arrs", "r", encoding="utf-8") as f:
 with open("compiler.py", "w", encoding="utf-8") as f:
     f.write(get_lexer(code))
 
-# with open("compiler.py", "a", encoding="utf-8") as f:
-#     f.write(get_parser(code))
+with open("compiler.py", "a", encoding="utf-8") as f:
+    f.write(get_parser(code))
 
 from compiler import lexer
 
