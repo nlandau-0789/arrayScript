@@ -138,22 +138,29 @@ class operator():
         state = 0
         nb_args = 0
         found_symbol = False
+        def check_symbol():
+            nonlocal buffer, found_symbol, nb_args
+            if buffer:
+                if buffer != self.symbol:
+                    raise ValueError("presence of "+buffer+" symbol in "+name+"'s definition, which is not correct")
+                if found_symbol:
+                    raise ValueError("presence of symbol twice in "+name+"'s definition, which is not correct")
+                self.pattern.append(self.__name__)
+                nb_args += 1
+                self.return_value.insert(0, nb_args)
+                found_symbol = True
+                buffer = ""
         for i in pattern:
             if i == " ":
+                check_symbol()
                 continue
             if i == "{":
                 if state == 1:
                     raise ValueError("should have closed '{' in operator "+name+"'s definition")
-                if buffer:
-                    if buffer != self.symbol:
-                        raise ValueError("presence of "+buffer+" symbol in "+name+"'s definition, which is not correct")
-                    if found_symbol:
-                        raise ValueError("presence of symbol twice in "+name+"'s definition, which is not correct")
-                    self.pattern.append(self.__name__)
-                    nb_args += 1
-                    self.return_value.insert(0, nb_args)
-                    found_symbol = True
+                    # print("found symbol :", buffer)
                 state = 1
+                check_symbol()
+                continue
             if i == "}":
                 if state == 0:
                     raise ValueError("should have opened '{' in operator "+name+"'s definition")
@@ -162,8 +169,9 @@ class operator():
                 self.pattern.append("expr")
                 self.return_value.append(nb_args)
                 buffer = ""
-            if state == 1:
-                buffer += i
+                continue
+            buffer += i
+        check_symbol()
         self.pattern = " ".join(self.pattern)
         self.return_value = f"p[0] = ({', '.join('p['+str(i)+']' for i in self.return_value)})"
         self.tokenizer = f"""t_{self.__name__} = r'''{re.escape(symbol)}'''"""
@@ -176,8 +184,8 @@ operators = [
     operator("+","add",1,"{a} + {b}"),
     operator("-","sub",1,"{a} - {b}"),
     operator("*","mul",2,"{a} * {b}"),
-    operator("//","div",2,"{a} / {b}"),
-    operator("/","trudiv",2,"{a} // {b}"),
+    operator("//","div",2,"{a} // {b}"),
+    operator("/","trudiv",2,"{a} / {b}"),
     operator("**","pow",3,"{a} ** {b}"),
     operator("-+-","join",1,"{a} -+- {b}"),
     operator("-|-","split",1,"{a} -|- {b}"),
@@ -198,8 +206,8 @@ operators = [
     operator("--","decr",5,"{a} --"),
     operator("+.","outer",1,"{a} +. {b} {c}"),
     operator("-.","inner",1,"{a} {b} -. {c} {d}"),
-    operator("<|>","reverse",5,"o| {a}"),
-    operator("-o-","rotate",4,"{a} o- {b}"),
+    operator("<|>","reverse",5,"<|> {a}"),
+    operator("-o-","rotate",4,"{a} -o- {b}"),
     operator(".","apply",4,"{a} . {b}"),
     operator("::","compose",7,"{a} :: {b}"),
     operator("..","over",7,"{a} .. {b}"),
@@ -223,3 +231,6 @@ operators = [
 ]
 
 tokens = consts_types + keywords + operators + types
+
+# from pprint import pprint
+# pprint([(x.pattern, x.return_value) for x in operators])
