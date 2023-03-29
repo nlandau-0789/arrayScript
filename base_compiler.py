@@ -132,7 +132,40 @@ class operator():
         self.symbol = symbol
         self.__name__ = f"operator_{name}"
         self.priority = float(priority)
-        self.pattern = pattern
+        self.return_value = []
+        self.pattern = []
+        buffer = ""
+        state = 0
+        nb_args = 0
+        found_symbol = False
+        for i in pattern:
+            if i == " ":
+                continue
+            if i == "{":
+                if state == 1:
+                    raise ValueError("should have closed '{' in operator "+name+"'s definition")
+                if buffer:
+                    if buffer != self.symbol:
+                        raise ValueError("presence of "+buffer+" symbol in "+name+"'s definition, which is not correct")
+                    if found_symbol:
+                        raise ValueError("presence of symbol twice in "+name+"'s definition, which is not correct")
+                    self.pattern.append(self.__name__)
+                    nb_args += 1
+                    self.return_value.insert(0, nb_args)
+                    found_symbol = True
+                state = 1
+            if i == "}":
+                if state == 0:
+                    raise ValueError("should have opened '{' in operator "+name+"'s definition")
+                state = 0
+                nb_args += 1
+                self.pattern.append("expr")
+                self.return_value.append(nb_args)
+                buffer = ""
+            if state == 1:
+                buffer += i
+        self.pattern = " ".join(self.pattern)
+        self.return_value = f"p[0] = ({', '.join('p['+str(i)+']' for i in self.return_value)})"
         self.tokenizer = f"""t_{self.__name__} = r'''{re.escape(symbol)}'''"""
         self.keyword = symbol
     
