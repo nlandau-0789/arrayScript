@@ -23,7 +23,7 @@ tokens = (""" + ", ".join(map(lambda x: repr(x.__name__), tokens)) + """, 'VAR')
 reserved = {{{", ".join(map(lambda x: repr(x.keyword)+": "+repr(x.__name__),filter(lambda x: isAttrAlpha(x, "keyword", "_"), tokens)))}}}
 
 def t_VAR(t):
-   r'[a-zA-Z][a-zA-Z_\d]*'
+   r'[a-zA-Z_][a-zA-Z_\d]*'
    t.type = reserved.get(t.value,'VAR')
    return t
 

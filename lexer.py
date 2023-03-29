@@ -127,7 +127,7 @@ t_operator_goodname2 = r'''op2'''
 reserved = {'for': 'for', 'while': 'while', 'if': 'if', 'else': 'else', 'elif': 'elif', 'func': 'func', 'struct': 'struct', 'operator': 'operator', 'return': 'return', 'break': 'break', 'continue': 'continue', 'del': 'del', 'true': 'true', 'false': 'false', 'lambda': 'lambda', 'pass': 'pass', 'and': 'operator_and', 'or': 'operator_or', 'xor': 'operator_xor', 'in': 'operator_contains', 'not': 'operator_not', 'type': 'type_type', 'num': 'type_num', 'any': 'type_any', 'str': 'type_str', 'list': 'type_list', 'tuple': 'type_tuple', 'array': 'type_array', 'vector': 'type_vector', 'dict': 'type_dict', 'generator': 'type_generator', 'linked_list': 'type_linked_list', 'doubly_linked_list': 'type_doubly_linked_list', 'deque': 'type_deque', 'heap': 'type_heap', 'fibonacci_heap': 'type_fibonacci_heap', 'tree': 'type_tree', 'trie': 'type_trie', 'stack': 'type_stack', 'queue': 'type_queue', 'binary_search_tree': 'type_binary_search_tree', 'bitset': 'type_bitset', 'set': 'type_set', 'map': 'type_map', 'range': 'type_range', 'bad_struct': 'type_bad_struct', 'op': 'operator_goodname', 'S': 'operator_s_combinator'}
 
 def t_VAR(t):
-   r'[a-zA-Z][a-zA-Z_\d]*'
+   r'[a-zA-Z_][a-zA-Z_\d]*'
    t.type = reserved.get(t.value,'VAR')
    return t
 

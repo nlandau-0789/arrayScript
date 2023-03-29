@@ -1,4 +1,4 @@
-from lexer_compilator import get_compilator
+from lexer_compiler import get_compilator
 from pprint import pprint
 
 with open("exemple.arrs", "r", encoding="utf-8") as f:
