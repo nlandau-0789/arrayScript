@@ -15,6 +15,9 @@ def get_parser(code):
     return \
 f"""
 
-# parser = yacc.yacc()
+def p_error(p):
+    print(f"Syntax error at line {{p.lexer.lineno}}")
+
+parser = yacc.yacc()
 
 """

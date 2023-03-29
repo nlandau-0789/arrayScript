@@ -74,7 +74,7 @@ types = [
     type_('range')
 ]
 
-literals = ",()[]{}:=#"
+literals = ",()[]{}:="
 
 class NUM():
     tokenizer = r"""

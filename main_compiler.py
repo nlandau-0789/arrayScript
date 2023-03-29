@@ -5,13 +5,13 @@ from pprint import pprint
 with open("exemple.arrs", "r", encoding="utf-8") as f:
     code = f.read()
 
-with open("arrs_lexer.py", "w", encoding="utf-8") as f:
+with open("compiler.py", "w", encoding="utf-8") as f:
     f.write(get_lexer(code))
 
-with open("arrs_parser.py", "w", encoding="utf-8") as f:
-    f.write(get_parser(code))
+# with open("compiler.py", "a", encoding="utf-8") as f:
+#     f.write(get_parser(code))
 
-from arrs_lexer import lexer
+from compiler import lexer
 
 lexer.input(code)
 pprint(list(lexer))

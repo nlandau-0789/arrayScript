@@ -14,7 +14,7 @@ def isAttrAlpha(s, attr, exceptions = []):
 def get_lexer(code):
     tokens.extend(extra_compile_data.get_new_structs(code))
     tokens.extend(extra_compile_data.get_new_operators(code))
-    return """from ply import lex
+    return """from ply import *
 from pprint import pprint
 
 tokens = (""" + ", ".join(map(lambda x: repr(x.__name__), tokens)) + """, 'VAR')
@@ -28,6 +28,12 @@ def t_VAR(t):
    return t
 
 literals = {repr(literals)}
+
+def t_comment(t):"""+r"""
+        r'(/\*(.|\n)*?\*/)|(\#.*)'
+        print(repr(t.value), t.value.count('\n'))
+        t.lexer.lineno += t.value.count('\n')
+
 """ + r"""
 
 def t_newline(t):
