@@ -11,12 +11,11 @@ with open("compiler.py", "w", encoding="utf-8") as f:
 with open("compiler.py", "a", encoding="utf-8") as f:
     f.write(get_parser(code))
 
-from compiler import lexer
+# from compiler import lexer
 
-lexer.input(code)
-pprint(list(lexer))
+# lexer.input(code)
+# pprint(list(lexer))
 
-# from arrs_parser import parser
+from compiler import parser
 
-# parser.parse(code)
-# pprint(list(parser))
+parser.parse(code)

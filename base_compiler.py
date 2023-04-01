@@ -22,8 +22,6 @@ keywords = [
     keyword("break"),
     keyword("continue"),
     keyword("del"),
-    keyword("true"),
-    keyword("false"),
     keyword("lambda"),
     keyword("pass"),
 ]
@@ -74,7 +72,7 @@ types = [
     type_('range')
 ]
 
-literals = ",()[]{}:="
+literals = ",()[]{}:=;"
 
 class NUM():
     tokenizer = r"""
@@ -118,13 +116,21 @@ def t_STRING_DQ(t):
     r"""{match_string}"""
     return t'''
 
+class NULL():
+    tokenizer = r'''
+t_NULL = r'Null'    
+'''
+
 consts_types = [
-    NUM,
     FLOAT,
+    NUM,
+    NULL,
     STRING_3SQ,
     STRING_3DQ,
     STRING_SQ,
     STRING_DQ,
+    keyword("true"),
+    keyword("false"),
 ]
 
 class operator():

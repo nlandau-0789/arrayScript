@@ -1,17 +1,20 @@
 from ply import *
 from pprint import pprint
 
-tokens = ('NUM', 'FLOAT', 'STRING_3SQ', 'STRING_3DQ', 'STRING_SQ', 'STRING_DQ', 'for', 'while', 'if', 'else', 'elif', 'func', 'struct', 'operator', 'return', 'break', 'continue', 'del', 'true', 'false', 'lambda', 'pass', 'operator_add', 'operator_sub', 'operator_mul', 'operator_div', 'operator_trudiv', 'operator_pow', 'operator_join', 'operator_split', 'operator_scan', 'operator_reduc', 'operator_bitand', 'operator_bitor', 'operator_bitxor', 'operator_bitshiftleft', 'operator_bitshiftright', 'operator_and', 'operator_or', 'operator_xor', 'operator_contains', 'operator_bitnot', 'operator_not', 'operator_incr', 'operator_decr', 'operator_outer', 'operator_inner', 'operator_reverse', 'operator_rotate', 'operator_apply', 'operator_compose', 'operator_over', 'operator_map', 'operator_sorted_incr', 'operator_sorted_decr', 'operator_less_than', 'operator_less_than_equals', 'operator_greater_than', 'operator_greater_than_equals', 'operator_equals', 'operator_not_equals', 'operator_smallest', 'operator_greatest', 'type_type', 'type_num', 'type_any', 'type_u64', 'type_u32', 'type_u16', 'type_u8', 'type_i64', 'type_i32', 'type_i16', 'type_i8', 'type_f32', 'type_f64', 'type_str', 'type_list', 'type_tuple', 'type_array', 'type_vector', 'type_dict', 'type_generator', 'type_linked_list', 'type_doubly_linked_list', 'type_deque', 'type_heap', 'type_fibonacci_heap', 'type_tree', 'type_trie', 'type_stack', 'type_queue', 'type_binary_search_tree', 'type_bitset', 'type_set', 'type_map', 'type_range', 'type_bad_struct', 'operator_goodname', 'operator_s_combinator', 'operator_goodname2', 'VAR')
+tokens = ('FLOAT', 'NUM', 'NULL', 'STRING_3SQ', 'STRING_3DQ', 'STRING_SQ', 'STRING_DQ', 'true', 'false', 'for', 'while', 'if', 'else', 'elif', 'func', 'struct', 'operator', 'return', 'break', 'continue', 'del', 'lambda', 'pass', 'operator_add', 'operator_sub', 'operator_mul', 'operator_div', 'operator_trudiv', 'operator_pow', 'operator_join', 'operator_split', 'operator_scan', 'operator_reduc', 'operator_bitand', 'operator_bitor', 'operator_bitxor', 'operator_bitshiftleft', 'operator_bitshiftright', 'operator_and', 'operator_or', 'operator_xor', 'operator_contains', 'operator_bitnot', 'operator_not', 'operator_incr', 'operator_decr', 'operator_outer', 'operator_inner', 'operator_reverse', 'operator_rotate', 'operator_apply', 'operator_compose', 'operator_over', 'operator_map', 'operator_sorted_incr', 'operator_sorted_decr', 'operator_less_than', 'operator_less_than_equals', 'operator_greater_than', 'operator_greater_than_equals', 'operator_equals', 'operator_not_equals', 'operator_smallest', 'operator_greatest', 'type_type', 'type_num', 'type_any', 'type_u64', 'type_u32', 'type_u16', 'type_u8', 'type_i64', 'type_i32', 'type_i16', 'type_i8', 'type_f32', 'type_f64', 'type_str', 'type_list', 'type_tuple', 'type_array', 'type_vector', 'type_dict', 'type_generator', 'type_linked_list', 'type_doubly_linked_list', 'type_deque', 'type_heap', 'type_fibonacci_heap', 'type_tree', 'type_trie', 'type_stack', 'type_queue', 'type_binary_search_tree', 'type_bitset', 'type_set', 'type_map', 'type_range', 'type_bad_struct', 'type_bad_struct2', 'operator_goodname', 'operator_s_combinator', 'operator_s2_combinator', 'operator_goodname2', 'VAR')
+
+def t_FLOAT(t):
+    r"-?\d+\.\d+"
+    t.value = float(t.value)
+    return t
 
 def t_NUM(t):
     r"-?\d+"
     t.value = int(t.value)
     return t
 
-def t_FLOAT(t):
-    r"-?\d+\.\d+"
-    t.value = float(t.value)
-    return t
+t_NULL = r'Null'    
+
 
 def t_STRING_3SQ(t):
     r"""\'\'\'([^\\\n]|(\\.))*?\'\'\'"""
@@ -28,6 +31,8 @@ def t_STRING_SQ(t):
 def t_STRING_DQ(t):
     r"""\"([^\\\n]|(\\.))*?\""""
     return t
+t_true = r'''true'''
+t_false = r'''false'''
 t_for = r'''for'''
 t_while = r'''while'''
 t_if = r'''if'''
@@ -40,8 +45,6 @@ t_return = r'''return'''
 t_break = r'''break'''
 t_continue = r'''continue'''
 t_del = r'''del'''
-t_true = r'''true'''
-t_false = r'''false'''
 t_lambda = r'''lambda'''
 t_pass = r'''pass'''
 t_operator_add = r'''\+'''
@@ -120,18 +123,20 @@ t_type_set = r'''set'''
 t_type_map = r'''map'''
 t_type_range = r'''range'''
 t_type_bad_struct = r'''bad_struct'''
+t_type_bad_struct2 = r'''bad_struct2'''
 t_operator_goodname = r'''op'''
 t_operator_s_combinator = r'''S'''
+t_operator_s2_combinator = r'''S2'''
 t_operator_goodname2 = r'''op2'''
 
-reserved = {'for': 'for', 'while': 'while', 'if': 'if', 'else': 'else', 'elif': 'elif', 'func': 'func', 'struct': 'struct', 'operator': 'operator', 'return': 'return', 'break': 'break', 'continue': 'continue', 'del': 'del', 'true': 'true', 'false': 'false', 'lambda': 'lambda', 'pass': 'pass', 'and': 'operator_and', 'or': 'operator_or', 'xor': 'operator_xor', 'in': 'operator_contains', 'not': 'operator_not', 'type': 'type_type', 'num': 'type_num', 'any': 'type_any', 'str': 'type_str', 'list': 'type_list', 'tuple': 'type_tuple', 'array': 'type_array', 'vector': 'type_vector', 'dict': 'type_dict', 'generator': 'type_generator', 'linked_list': 'type_linked_list', 'doubly_linked_list': 'type_doubly_linked_list', 'deque': 'type_deque', 'heap': 'type_heap', 'fibonacci_heap': 'type_fibonacci_heap', 'tree': 'type_tree', 'trie': 'type_trie', 'stack': 'type_stack', 'queue': 'type_queue', 'binary_search_tree': 'type_binary_search_tree', 'bitset': 'type_bitset', 'set': 'type_set', 'map': 'type_map', 'range': 'type_range', 'bad_struct': 'type_bad_struct', 'op': 'operator_goodname', 'S': 'operator_s_combinator'}
+reserved = {'true': 'true', 'false': 'false', 'for': 'for', 'while': 'while', 'if': 'if', 'else': 'else', 'elif': 'elif', 'func': 'func', 'struct': 'struct', 'operator': 'operator', 'return': 'return', 'break': 'break', 'continue': 'continue', 'del': 'del', 'lambda': 'lambda', 'pass': 'pass', 'and': 'operator_and', 'or': 'operator_or', 'xor': 'operator_xor', 'in': 'operator_contains', 'not': 'operator_not', 'type': 'type_type', 'num': 'type_num', 'any': 'type_any', 'u64': 'type_u64', 'u32': 'type_u32', 'u16': 'type_u16', 'u8': 'type_u8', 'i64': 'type_i64', 'i32': 'type_i32', 'i16': 'type_i16', 'i8': 'type_i8', 'f32': 'type_f32', 'f64': 'type_f64', 'str': 'type_str', 'list': 'type_list', 'tuple': 'type_tuple', 'array': 'type_array', 'vector': 'type_vector', 'dict': 'type_dict', 'generator': 'type_generator', 'linked_list': 'type_linked_list', 'doubly_linked_list': 'type_doubly_linked_list', 'deque': 'type_deque', 'heap': 'type_heap', 'fibonacci_heap': 'type_fibonacci_heap', 'tree': 'type_tree', 'trie': 'type_trie', 'stack': 'type_stack', 'queue': 'type_queue', 'binary_search_tree': 'type_binary_search_tree', 'bitset': 'type_bitset', 'set': 'type_set', 'map': 'type_map', 'range': 'type_range', 'bad_struct': 'type_bad_struct', 'bad_struct2': 'type_bad_struct2', 'op': 'operator_goodname', 'S': 'operator_s_combinator', 'S2': 'operator_s2_combinator', 'op2': 'operator_goodname2'}
 
 def t_VAR(t):
    r'[a-zA-Z_][a-zA-Z_\d]*'
    t.type = reserved.get(t.value,'VAR')
    return t
 
-literals = ',()[]{}:='
+literals = ',()[]{}:=;'
 
 def t_comment(t):
         r'(/\*(.|\n)*?\*/)|(\#.*)'
@@ -158,6 +163,264 @@ lexer = lex.lex()
 #     lex.input(inp)
 #     pprint(list(lexer))
 
+
+def p_single_stmts(p):
+    '''
+    stmts : stmt
+    '''
+    p[0] = [p[1]]
+
+def p_stmts(p):
+    '''
+    stmts : stmt stmts
+    '''
+    p[0] = [p[1]]+p[2]
+
+def p_stmt(p):
+    '''
+    stmt : block_stmt
+         | line_stmt
+    '''
+    # pprint(p[1])
+    p[0] = p[1]
+
+def p_TYPE(p):
+    '''
+    TYPE : type_type
+         | type_num
+         | type_any
+         | type_u64
+         | type_u32
+         | type_u16
+         | type_u8
+         | type_i64
+         | type_i32
+         | type_i16
+         | type_i8
+         | type_f32
+         | type_f64
+         | type_str
+         | type_list
+         | type_tuple
+         | type_array
+         | type_vector
+         | type_dict
+         | type_generator
+         | type_linked_list
+         | type_doubly_linked_list
+         | type_deque
+         | type_heap
+         | type_fibonacci_heap
+         | type_tree
+         | type_trie
+         | type_stack
+         | type_queue
+         | type_binary_search_tree
+         | type_bitset
+         | type_set
+         | type_map
+         | type_range
+         | type_bad_struct
+         | type_bad_struct2
+    '''
+    p[0] = p[1]
+
+# def p_single_line_stmts(p):
+#     '''
+#     line_stmts : line_stmt
+#     '''
+#     p[0] = [p[1]]
+
+# def p_line_stmts(p):
+#     '''
+#     line_stmts : line_stmt line_stmts
+#     '''
+#     p[0] = [p[1]]+p[2]
+
+def p_line_stmt(p):
+    '''
+    line_stmt : assign_stmt
+              | expr
+              | pass
+              | return_stmt
+              | del_stmt
+              | declaration_stmt
+    '''
+    # print(p[1])
+    p[0] = p[1]
+
+def p_lambda_decl(p):
+    '''
+    lambda_decl : lambda comma_separated_names ':' expr
+    '''
+    p[0] = ("lambda", p[2], p[4])
+    
+def p_return_stmt(p):
+    '''
+    return_stmt : return expr
+    '''
+    # print("return statement at line", p.lexer.lineno)
+    p[0] = ("return", p[2])
+
+def p_del_stmt(p):
+    '''
+    del_stmt : del expr
+    '''
+    p[0] = ("del", p[2])
+
+def p_assign_stmt(p):
+    '''
+    assign_stmt : comma_separated_names '=' expr
+    '''
+    # print(("=", p[1], p[3]))
+    p[0] = ("=", p[1], p[3])
+
+def p_declaration_stmt(p):
+    '''
+    declaration_stmt : TYPE comma_separated_names
+    '''
+    p[0] = ("declaration", p[1], p[2])
+
+def p_comma_separated_name(p):
+    '''
+    comma_separated_names : VAR
+    '''
+    p[0] = [p[1]]
+
+def p_comma_separated_names(p):
+    '''
+    comma_separated_names : VAR ',' comma_separated_names 
+    '''
+    p[0] = [p[1]]+p[3]
+
+def p_block_stmt(p):
+    '''
+    block_stmt : block_decl '{' stmts '}'
+    '''
+    p[0] = tuple(list(p[1])+[p[3]])
+
+def p_block_decl(p):
+    '''
+    block_decl : for_decl
+               | if_decl
+               | else
+               | elif_decl
+               | operator_decl
+               | struct_decl
+               | while_decl
+               | func_decl
+    '''
+    p[0] = p[1]
+
+def p_for_decl(p):
+    '''
+    for_decl : for comma_separated_names operator_contains expr
+    '''
+    p[0] = ("for", p[2], p[4])
+
+def p_if_decl(p):
+    '''
+    if_decl : if expr
+    '''
+    p[0] = ("if", p[2])
+
+def p_elif_decl(p):
+    '''
+    elif_decl : elif expr
+    '''
+    p[0] = ("elif", p[2])
+
+def p_operator_decl(p):
+    '''
+    operator_decl : operator '(' arguments ')'
+    '''
+    p[0] = ("operator", p[3])
+
+def p_struct_decl(p):
+    '''
+    struct_decl : struct TYPE
+    '''
+    p[0] = ("struct", p[2])
+
+def p_while_decl(p):
+    '''
+    while_decl : while expr
+    '''
+    p[0] = ("while", p[2])
+
+def p_func_decl(p):
+    '''
+    func_decl : func VAR '(' def_arguments ')'
+    '''
+    p[0] = ("func", p[2], p[4])
+
+def p_def_argument(p):
+    '''
+    def_arguments : declaration_stmt
+    '''
+    p[0] = [p[1]]
+
+def p_def_arguments(p):
+    '''
+    def_arguments : declaration_stmt ';' def_arguments
+    '''
+    p[0] = [p[1]]+p[3]
+    
+def p_const_val(p):
+    '''
+    const_val : FLOAT
+              | NUM
+              | NULL
+              | STRING_3SQ
+              | STRING_3DQ
+              | STRING_SQ
+              | STRING_DQ
+              | true
+              | false
+    '''
+    p[0] = p[1]
+
+def p_return_val(p):
+    '''
+    return_val : type_type '(' arguments ')'
+               | type_num '(' arguments ')'
+               | type_any '(' arguments ')'
+               | type_u64 '(' arguments ')'
+               | type_u32 '(' arguments ')'
+               | type_u16 '(' arguments ')'
+               | type_u8 '(' arguments ')'
+               | type_i64 '(' arguments ')'
+               | type_i32 '(' arguments ')'
+               | type_i16 '(' arguments ')'
+               | type_i8 '(' arguments ')'
+               | type_f32 '(' arguments ')'
+               | type_f64 '(' arguments ')'
+               | type_str '(' arguments ')'
+               | type_list '(' arguments ')'
+               | type_tuple '(' arguments ')'
+               | type_array '(' arguments ')'
+               | type_vector '(' arguments ')'
+               | type_dict '(' arguments ')'
+               | type_generator '(' arguments ')'
+               | type_linked_list '(' arguments ')'
+               | type_doubly_linked_list '(' arguments ')'
+               | type_deque '(' arguments ')'
+               | type_heap '(' arguments ')'
+               | type_fibonacci_heap '(' arguments ')'
+               | type_tree '(' arguments ')'
+               | type_trie '(' arguments ')'
+               | type_stack '(' arguments ')'
+               | type_queue '(' arguments ')'
+               | type_binary_search_tree '(' arguments ')'
+               | type_bitset '(' arguments ')'
+               | type_set '(' arguments ')'
+               | type_map '(' arguments ')'
+               | type_range '(' arguments ')'
+               | type_bad_struct '(' arguments ')'
+               | type_bad_struct2 '(' arguments ')'
+               | VAR '(' arguments ')'
+    '''
+    p[0] = ("call", p[1], p[3])
 
 
 def p_operator_add(p):
@@ -461,6 +724,13 @@ def p_operator_s_combinator(p):
     p[0] = (p[1], p[2], p[3], p[4])
 
 
+def p_operator_s2_combinator(p):
+    '''
+    expr : operator_s2_combinator expr expr expr
+    '''
+    p[0] = (p[1], p[2], p[3], p[4])
+
+
 def p_operator_goodname2(p):
     '''
     expr : operator_goodname2 expr
@@ -473,13 +743,57 @@ def p_expr(p):
     '''
     expr : const_val 
          | VAR
+         | return_val
+         | lambda_decl
     '''
+    # print(p[1], p.lexer.lineno)
     p[0] = p[1]
 
-def p_single_argument(p):
+def p_empty(p):
+    'empty :'
+    pass
+
+def p_argument(p):
     '''
     arguments : expr
+              | type_type
+              | type_num
+              | type_any
+              | type_u64
+              | type_u32
+              | type_u16
+              | type_u8
+              | type_i64
+              | type_i32
+              | type_i16
+              | type_i8
+              | type_f32
+              | type_f64
+              | type_str
+              | type_list
+              | type_tuple
+              | type_array
+              | type_vector
+              | type_dict
+              | type_generator
+              | type_linked_list
+              | type_doubly_linked_list
+              | type_deque
+              | type_heap
+              | type_fibonacci_heap
+              | type_tree
+              | type_trie
+              | type_stack
+              | type_queue
+              | type_binary_search_tree
+              | type_bitset
+              | type_set
+              | type_map
+              | type_range
+              | type_bad_struct
+              | type_bad_struct2
     '''
+    # print("argument :", p[1], "at line", p.lexer.lineno)
     p[0] = [p[1]]
 
 def p_arguments(p):
@@ -487,60 +801,30 @@ def p_arguments(p):
     arguments : arguments ',' arguments
     '''
     p[0] = p[1]+p[3]
-    
 
-def p_const_val(p):
+
+def p_noarg(p):
     '''
-    const_val : NUM
-              | FLOAT
-              | STRING_3SQ
-              | STRING_3DQ
-              | STRING_SQ
-              | STRING_DQ
+    arguments : empty
+    '''
+    p[0] = []
+    
+def p_string(p):
+    '''
+    STRING : STRING_3SQ
+           | STRING_3DQ
+           | STRING_SQ
+           | STRING_DQ
     '''
     p[0] = p[1]
 
-def p_return_val(p):
-    '''
-    return_val : type_type '(' arguments ')'
-               | type_num '(' arguments ')'
-               | type_any '(' arguments ')'
-               | type_u64 '(' arguments ')'
-               | type_u32 '(' arguments ')'
-               | type_u16 '(' arguments ')'
-               | type_u8 '(' arguments ')'
-               | type_i64 '(' arguments ')'
-               | type_i32 '(' arguments ')'
-               | type_i16 '(' arguments ')'
-               | type_i8 '(' arguments ')'
-               | type_f32 '(' arguments ')'
-               | type_f64 '(' arguments ')'
-               | type_str '(' arguments ')'
-               | type_list '(' arguments ')'
-               | type_tuple '(' arguments ')'
-               | type_array '(' arguments ')'
-               | type_vector '(' arguments ')'
-               | type_dict '(' arguments ')'
-               | type_generator '(' arguments ')'
-               | type_linked_list '(' arguments ')'
-               | type_doubly_linked_list '(' arguments ')'
-               | type_deque '(' arguments ')'
-               | type_heap '(' arguments ')'
-               | type_fibonacci_heap '(' arguments ')'
-               | type_tree '(' arguments ')'
-               | type_trie '(' arguments ')'
-               | type_stack '(' arguments ')'
-               | type_queue '(' arguments ')'
-               | type_binary_search_tree '(' arguments ')'
-               | type_bitset '(' arguments ')'
-               | type_set '(' arguments ')'
-               | type_map '(' arguments ')'
-               | type_range '(' arguments ')'
-    '''
-    p[0] = ()
-
 def p_error(p):
-    print(f"Syntax error at line {p.lexer.lineno}")
+    if p:
+        print("Syntax error at token", p.type, "at line", p.lexer.lineno)
+        # Just discard the token and tell the parser it's okay.
+        parser.errok()
+    else:
+        print("Syntax error at EOF")
 
 parser = yacc.yacc()
 

@@ -19,39 +19,193 @@ def p_{op.__name__}(p):
     {op.return_value}
 
 """
+def format_types():
+    return "\n         | ".join(x.__name__ for x in types)
 
 def format_func_ret_val():
-    return f"\n               | ".join(map(lambda x : f"{x.__name__} '(' arguments ')'", types+funcs))
+    return "\n               | ".join(map(lambda x : f"{x.__name__} '(' arguments ')'", types+funcs))
 
 def format_consts_types():
     return "\n              | ".join(x.__name__ for x in consts_types)
 
+def format_types_and_funcs_as_args():
+    return "\n              | ".join(x.__name__ for x in types+funcs)
+
+def format_decl_stmt():
+    return "\n                     | ".join(f"{x.__name__} comma_separated_names" for x in types)
+
 def get_parser(code):
     operators.extend(extra_compile_data.get_new_operators(code))
+    types.extend(extra_compile_data.get_new_structs(code))
     return \
 f"""
-{"".join(map(format_operator_def, operators))}
-
-def p_expr(p):
+def p_single_stmts(p):
     '''
-    expr : const_val 
-         | VAR
-    '''
-    p[0] = p[1]
-
-def p_single_argument(p):
-    '''
-    arguments : expr
+    stmts : stmt
     '''
     p[0] = [p[1]]
 
-def p_arguments(p):
+def p_stmts(p):
     '''
-    arguments : arguments ',' arguments
+    stmts : stmt stmts
     '''
-    p[0] = p[1]+p[3]
-    
+    p[0] = [p[1]]+p[2]
 
+def p_stmt(p):
+    '''
+    stmt : block_stmt
+         | line_stmt
+    '''
+    # pprint(p[1])
+    p[0] = p[1]
+
+def p_TYPE(p):
+    '''
+    TYPE : {format_types()}
+    '''
+    p[0] = p[1]
+
+# def p_single_line_stmts(p):
+#     '''
+#     line_stmts : line_stmt
+#     '''
+#     p[0] = [p[1]]
+
+# def p_line_stmts(p):
+#     '''
+#     line_stmts : line_stmt line_stmts
+#     '''
+#     p[0] = [p[1]]+p[2]
+
+def p_line_stmt(p):
+    '''
+    line_stmt : assign_stmt
+              | expr
+              | pass
+              | return_stmt
+              | del_stmt
+              | declaration_stmt
+    '''
+    # print(p[1])
+    p[0] = p[1]
+
+def p_lambda_decl(p):
+    '''
+    lambda_decl : lambda comma_separated_names ':' expr
+    '''
+    p[0] = ("lambda", p[2], p[4])
+    
+def p_return_stmt(p):
+    '''
+    return_stmt : return expr
+    '''
+    # print("return statement at line", p.lexer.lineno)
+    p[0] = ("return", p[2])
+
+def p_del_stmt(p):
+    '''
+    del_stmt : del expr
+    '''
+    p[0] = ("del", p[2])
+
+def p_assign_stmt(p):
+    '''
+    assign_stmt : comma_separated_names '=' expr
+    '''
+    # print(("=", p[1], p[3]))
+    p[0] = ("=", p[1], p[3])
+
+def p_declaration_stmt(p):
+    '''
+    declaration_stmt : TYPE comma_separated_names
+    '''
+    p[0] = ("declaration", p[1], p[2])
+
+def p_comma_separated_name(p):
+    '''
+    comma_separated_names : VAR
+    '''
+    p[0] = [p[1]]
+
+def p_comma_separated_names(p):
+    '''
+    comma_separated_names : VAR ',' comma_separated_names 
+    '''
+    p[0] = [p[1]]+p[3]
+
+def p_block_stmt(p):
+    '''
+    block_stmt : block_decl '{{' stmts '}}'
+    '''
+    p[0] = tuple(list(p[1])+[p[3]])
+
+def p_block_decl(p):
+    '''
+    block_decl : for_decl
+               | if_decl
+               | else
+               | elif_decl
+               | operator_decl
+               | struct_decl
+               | while_decl
+               | func_decl
+    '''
+    p[0] = p[1]
+
+def p_for_decl(p):
+    '''
+    for_decl : for comma_separated_names operator_contains expr
+    '''
+    p[0] = ("for", p[2], p[4])
+
+def p_if_decl(p):
+    '''
+    if_decl : if expr
+    '''
+    p[0] = ("if", p[2])
+
+def p_elif_decl(p):
+    '''
+    elif_decl : elif expr
+    '''
+    p[0] = ("elif", p[2])
+
+def p_operator_decl(p):
+    '''
+    operator_decl : operator '(' arguments ')'
+    '''
+    p[0] = ("operator", p[3])
+
+def p_struct_decl(p):
+    '''
+    struct_decl : struct TYPE
+    '''
+    p[0] = ("struct", p[2])
+
+def p_while_decl(p):
+    '''
+    while_decl : while expr
+    '''
+    p[0] = ("while", p[2])
+
+def p_func_decl(p):
+    '''
+    func_decl : func VAR '(' def_arguments ')'
+    '''
+    p[0] = ("func", p[2], p[4])
+
+def p_def_argument(p):
+    '''
+    def_arguments : declaration_stmt
+    '''
+    p[0] = [p[1]]
+
+def p_def_arguments(p):
+    '''
+    def_arguments : declaration_stmt ';' def_arguments
+    '''
+    p[0] = [p[1]]+p[3]
+    
 def p_const_val(p):
     '''
     const_val : {format_consts_types()}
@@ -61,11 +215,63 @@ def p_const_val(p):
 def p_return_val(p):
     '''
     return_val : {format_func_ret_val()}
+               | VAR '(' arguments ')'
     '''
-    p[0] = ()
+    p[0] = ("call", p[1], p[3])
+
+{"".join(map(format_operator_def, operators))}
+
+def p_expr(p):
+    '''
+    expr : const_val 
+         | VAR
+         | return_val
+         | lambda_decl
+    '''
+    # print(p[1], p.lexer.lineno)
+    p[0] = p[1]
+
+def p_empty(p):
+    'empty :'
+    pass
+
+def p_argument(p):
+    '''
+    arguments : expr
+              | {format_types_and_funcs_as_args()}
+    '''
+    # print("argument :", p[1], "at line", p.lexer.lineno)
+    p[0] = [p[1]]
+
+def p_arguments(p):
+    '''
+    arguments : arguments ',' arguments
+    '''
+    p[0] = p[1]+p[3]
+
+
+def p_noarg(p):
+    '''
+    arguments : empty
+    '''
+    p[0] = []
+    
+def p_string(p):
+    '''
+    STRING : STRING_3SQ
+           | STRING_3DQ
+           | STRING_SQ
+           | STRING_DQ
+    '''
+    p[0] = p[1]
 
 def p_error(p):
-    print(f"Syntax error at line {{p.lexer.lineno}}")
+    if p:
+        print("Syntax error at token", p.type, "at line", p.lexer.lineno)
+        # Just discard the token and tell the parser it's okay.
+        parser.errok()
+    else:
+        print("Syntax error at EOF")
 
 parser = yacc.yacc()
 

@@ -7,28 +7,47 @@ sur les R lignes suivantes :
 Ii et Ji deux entiers séparés par un espace : les index de début et de fin de l'intervalle repeinte (0-indexed)*/
 
 
-struct bad_struct :
+struct bad_struct {
     num a,b
     list c
+}
 
-operator{"op","goodname",5}("{a} op {b}"):
-    pass
+struct bad_struct2 {
+    num a,b
+    list c
+}
 
-operator { "S", "s_combinator" , 0}("S {f} {g} {x}"):
-    lambda x: f(x, g(x))
+operator ("op", "goodname", 5, "{a} op {b}"){
+    return Null
+}
 
-operator { "op2", "goodname2" , 9.7}("op2 {a}"):
-    pass
+operator ("S", "s_combinator" , 0, "S {f} {g} {x}"){
+    return lambda x: f(x, g(x))
+}
 
-func dummy(num ):
-    pass
+operator ("S2", "s2_combinator" , 0, "S2 {f} {g} {x}"){
+    return lambda x: f(x, g(x))
+}
+
+operator ("op2", "goodname2" , 9.7,"op2 {a}"){
+    return Null
+}
+
+func dummy(num a){
+    return Null
+}
+
+func dummy2(num a, b; list c){
+    return Null
+}
 
 N = num::input()
 R = num::input()
 sections = tuple(N, num) # N:nombre d'items, num: type
-for i in range(R):
+for i in range(R){
     I, J = num..split::input()
     sections[I]++
     sections[J]--
+}
 sections = + -> sections
 output(" " -+- sections)

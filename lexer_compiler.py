@@ -9,7 +9,7 @@ def isAttrAlpha(s, attr, exceptions = []):
     # print(t)
     t = "".join(filter(lambda x: not x in exceptions, t))
     # print(t)
-    return all(map(str.isalpha, t))
+    return all(map(str.isalnum, t))
 
 def get_lexer(code):
     tokens.extend(extra_compile_data.get_new_structs(code))
