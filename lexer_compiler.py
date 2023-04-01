@@ -14,8 +14,12 @@ def isAttrAlpha(s, attr, exceptions = []):
 def get_lexer(code):
     tokens.extend(extra_compile_data.get_new_structs(code))
     tokens.extend(extra_compile_data.get_new_operators(code))
-    return """from ply import *
+    return r"""from ply import *
 from pprint import pprint
+
+def find_column(input, token):
+    line_start = input.rfind('\n', 0, token.lexpos) + 1
+    return (token.lexpos - line_start) + 1
 
 tokens = (""" + ", ".join(map(lambda x: repr(x.__name__), tokens)) + """, 'VAR')
 """ + "\n".join(map(lambda x: x.tokenizer, tokens)) + f"""
@@ -44,6 +48,9 @@ t_ignore  = ' \t'
 def t_error(t):
     print(f"Illegal character {t.value[0]} at line {t.lexer.lineno}")
     t.lexer.skip(1)
+
+def t_eof(t):
+    return None
 
 lexer = lex.lex()
 

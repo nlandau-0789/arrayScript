@@ -38,6 +38,7 @@ class type_():
 types = [
     type_('type'), # base mataclass (comme en python)
     type_('num'), # pas de limite
+    type_('bool'), # pas de limite
     type_('any'), # pour les déclarations de fonctions
     type_('u64'), 
     type_('u32'), 
@@ -116,20 +117,15 @@ def t_STRING_DQ(t):
     r"""{match_string}"""
     return t'''
 
-class NULL():
-    tokenizer = r'''
-t_NULL = r'Null'    
-'''
-
 consts_types = [
     FLOAT,
     NUM,
-    NULL,
     STRING_3SQ,
     STRING_3DQ,
     STRING_SQ,
     STRING_DQ,
     keyword("true"),
+    keyword("Null"),
     keyword("false"),
 ]
 
@@ -215,7 +211,7 @@ operators = [
     operator("<|>","reverse",5,"<|> {a}"),
     operator("-o-","rotate",4,"{a} -o- {b}"),
     operator(".","apply",4,"{a} . {b}"),
-    operator("::","compose",7,"{a} :: {b}"),
+    operator("::","compose",7.5,"{a} :: {b}"),
     operator("..","over",7,"{a} .. {b}"),
     # operator("()","call",6,"{a} ( {*} )"), # special symbol "*" (cf regex)
     # operator("[]","item",6,"{a} [ {+} ]"), # special symbol "+" (cf regex)

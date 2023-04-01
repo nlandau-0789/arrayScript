@@ -34,11 +34,29 @@ def format_types_and_funcs_as_args():
 def format_decl_stmt():
     return "\n                     | ".join(f"{x.__name__} comma_separated_names" for x in types)
 
+def format_precedence():
+    from itertools import groupby
+    groups = list(map(lambda x : (x[0], list(map(lambda x: x.__name__, x[1]))), groupby(sorted(operators, key=lambda x: x.priority), key=lambda x: x.priority)))
+    groups = list(map(lambda x : ("left", *x[1]), groups))
+    # pprint(groups)
+    return f"""precedence = (("left", "="), {", ".join(map(str, groups))})"""
+
 def get_parser(code):
     operators.extend(extra_compile_data.get_new_operators(code))
     types.extend(extra_compile_data.get_new_structs(code))
     return \
 f"""
+{format_precedence()}
+
+start = 'program'
+
+def p_program(p):
+    '''
+    program : stmts
+    '''
+    pprint(p[1], indent=4)
+    p[0] = p[1]
+
 def p_single_stmts(p):
     '''
     stmts : stmt
@@ -49,44 +67,63 @@ def p_stmts(p):
     '''
     stmts : stmt stmts
     '''
+    # print([p[1]]+p[2])
     p[0] = [p[1]]+p[2]
 
 def p_stmt(p):
     '''
-    stmt : block_stmt
-         | line_stmt
+    stmt : line_stmt
+         | block_stmt
     '''
-    # pprint(p[1])
+        #  | exprs
+    # pprint(p[1], indent=4)
     p[0] = p[1]
 
 def p_TYPE(p):
     '''
     TYPE : {format_types()}
     '''
-    p[0] = p[1]
-
-# def p_single_line_stmts(p):
-#     '''
-#     line_stmts : line_stmt
-#     '''
-#     p[0] = [p[1]]
-
-# def p_line_stmts(p):
-#     '''
-#     line_stmts : line_stmt line_stmts
-#     '''
-#     p[0] = [p[1]]+p[2]
+    p[0] = ("type", p[1])
 
 def p_line_stmt(p):
     '''
-    line_stmt : assign_stmt
+    line_stmt : return_stmt
               | expr
-              | pass
-              | return_stmt
               | del_stmt
               | declaration_stmt
+              | pass
+              | continue
+              | break
+              | assign_stmt
     '''
-    # print(p[1])
+    # print("======================", p[1])
+    p[0] = p[1]
+
+def p_item(p):
+    '''
+    item : expr '[' arguments ']'
+    '''
+    # print(("item", p[1], p[3]))
+    p[0] = ("item", p[1], p[3])
+
+def p_simple_slice(p):
+    '''
+    simple_slice : expr '[' arguments ':' arguments ']'
+    '''
+    p[0] = ("simple_slice", p[1], p[3], p[5])
+
+def p_full_slice(p):
+    '''
+    full_slice : expr '[' arguments ':' arguments ':' arguments ']'
+    '''
+    p[0] = ("full_slice", p[1], p[3], p[5], p[7])
+
+def p_listop(p):
+    '''
+    expr : item
+         | simple_slice
+         | full_slice
+    '''
     p[0] = p[1]
 
 def p_lambda_decl(p):
@@ -111,9 +148,12 @@ def p_del_stmt(p):
 def p_assign_stmt(p):
     '''
     assign_stmt : comma_separated_names '=' expr
+                | item '=' expr
+                | simple_slice '=' expr
+                | full_slice '=' expr
     '''
     # print(("=", p[1], p[3]))
-    p[0] = ("=", p[1], p[3])
+    p[0] = ("assign", p[1], p[3])
 
 def p_declaration_stmt(p):
     '''
@@ -125,13 +165,13 @@ def p_comma_separated_name(p):
     '''
     comma_separated_names : VAR
     '''
-    p[0] = [p[1]]
+    p[0] = [("var", p[1])]
 
 def p_comma_separated_names(p):
     '''
     comma_separated_names : VAR ',' comma_separated_names 
     '''
-    p[0] = [p[1]]+p[3]
+    p[0] = [("var", p[1])]+p[3]
 
 def p_block_stmt(p):
     '''
@@ -156,6 +196,7 @@ def p_for_decl(p):
     '''
     for_decl : for comma_separated_names operator_contains expr
     '''
+    # print(("for", p[2], p[4]))
     p[0] = ("for", p[2], p[4])
 
 def p_if_decl(p):
@@ -210,7 +251,23 @@ def p_const_val(p):
     '''
     const_val : {format_consts_types()}
     '''
-    p[0] = p[1]
+    # print(("const", p[1]))
+    p[0] = ("const", p[1])
+
+def p_paren_expr(p):
+    '''
+    expr : '(' expr ')'
+    '''
+    p[0] = p[2]
+
+{"".join(map(format_operator_def, operators))}
+
+def p_var(p):
+    '''
+    expr : VAR
+    '''
+    # print("aga", ("var", p[1]))
+    p[0] = ("var", p[1])
 
 def p_return_val(p):
     '''
@@ -219,14 +276,12 @@ def p_return_val(p):
     '''
     p[0] = ("call", p[1], p[3])
 
-{"".join(map(format_operator_def, operators))}
-
 def p_expr(p):
     '''
     expr : const_val 
-         | VAR
          | return_val
          | lambda_decl
+         | TYPE
     '''
     # print(p[1], p.lexer.lineno)
     p[0] = p[1]
@@ -238,8 +293,8 @@ def p_empty(p):
 def p_argument(p):
     '''
     arguments : expr
-              | {format_types_and_funcs_as_args()}
     '''
+            #   | {"format_types_and_funcs_as_args()"}
     # print("argument :", p[1], "at line", p.lexer.lineno)
     p[0] = [p[1]]
 
@@ -273,6 +328,6 @@ def p_error(p):
     else:
         print("Syntax error at EOF")
 
-parser = yacc.yacc()
+parser = yacc.yacc(debug=True)
 
 """
