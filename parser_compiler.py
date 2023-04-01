@@ -16,6 +16,7 @@ def p_{op.__name__}(p):
     '''
     expr : {op.pattern}
     '''
+    # print("{op.symbol}", p.lexer.lineno)
     {op.return_value}
 
 """
@@ -57,6 +58,26 @@ def p_program(p):
     pprint(p[1], indent=4)
     p[0] = p[1]
 
+def p_program2(p):
+    '''
+    program : newline stmts
+            | newline stmts newline
+    '''
+    pprint(p[2], indent=4)
+    p[0] = p[2]
+
+def p_newline(p):
+    '''
+    newline : NEWLINE
+    '''
+    p[0] = p[1]
+
+def p_newlines(p):
+    '''
+    newline : NEWLINE newline 
+    '''
+    p[0] = p[1]
+
 def p_single_stmts(p):
     '''
     stmts : stmt
@@ -65,17 +86,16 @@ def p_single_stmts(p):
 
 def p_stmts(p):
     '''
-    stmts : stmt stmts
+    stmts : stmts newline stmt
     '''
-    # print([p[1]]+p[2])
-    p[0] = [p[1]]+p[2]
+    # pprint(("stmts", p[1]+[p[3]]), indent=4)
+    p[0] = p[1]+[p[3]]
 
 def p_stmt(p):
     '''
     stmt : line_stmt
          | block_stmt
     '''
-        #  | exprs
     # pprint(p[1], indent=4)
     p[0] = p[1]
 
@@ -96,7 +116,7 @@ def p_line_stmt(p):
               | break
               | assign_stmt
     '''
-    # print("======================", p[1])
+    # print(p[1])
     p[0] = p[1]
 
 def p_item(p):
@@ -124,6 +144,7 @@ def p_listop(p):
          | simple_slice
          | full_slice
     '''
+    # pprint(p[1], indent=4)
     p[0] = p[1]
 
 def p_lambda_decl(p):
@@ -152,7 +173,7 @@ def p_assign_stmt(p):
                 | simple_slice '=' expr
                 | full_slice '=' expr
     '''
-    # print(("=", p[1], p[3]))
+    # print("=", p[1], p[3])
     p[0] = ("assign", p[1], p[3])
 
 def p_declaration_stmt(p):
@@ -258,6 +279,7 @@ def p_paren_expr(p):
     '''
     expr : '(' expr ')'
     '''
+    # print("parens", p.lexer.lineno)
     p[0] = p[2]
 
 {"".join(map(format_operator_def, operators))}
@@ -266,7 +288,7 @@ def p_var(p):
     '''
     expr : VAR
     '''
-    # print("aga", ("var", p[1]))
+    # print("var", p[1], p.lexer.lineno)
     p[0] = ("var", p[1])
 
 def p_return_val(p):
@@ -274,6 +296,7 @@ def p_return_val(p):
     return_val : {format_func_ret_val()}
                | VAR '(' arguments ')'
     '''
+    # print("return value", p.lexer.lineno)
     p[0] = ("call", p[1], p[3])
 
 def p_expr(p):
@@ -295,13 +318,14 @@ def p_argument(p):
     arguments : expr
     '''
             #   | {"format_types_and_funcs_as_args()"}
-    # print("argument :", p[1], "at line", p.lexer.lineno)
+    # print("argument :", p[1])
     p[0] = [p[1]]
 
 def p_arguments(p):
     '''
     arguments : arguments ',' arguments
     '''
+    # print("arguments :", p[1]+p[3])
     p[0] = p[1]+p[3]
 
 
@@ -309,20 +333,21 @@ def p_noarg(p):
     '''
     arguments : empty
     '''
+    # print("noarg")
     p[0] = []
     
-def p_string(p):
-    '''
-    STRING : STRING_3SQ
-           | STRING_3DQ
-           | STRING_SQ
-           | STRING_DQ
-    '''
-    p[0] = p[1]
+# def p_string(p):
+#     '''
+#     STRING : STRING_3SQ
+#            | STRING_3DQ
+#            | STRING_SQ
+#            | STRING_DQ
+#     '''
+#     p[0] = p[1]
 
 def p_error(p):
     if p:
-        print("Syntax error at token", p.type, "at line", p.lexer.lineno)
+        print("Syntax error at token", p.type, ":", repr(p.value), "at line", p.lexer.lineno)
         # Just discard the token and tell the parser it's okay.
         parser.errok()
     else:

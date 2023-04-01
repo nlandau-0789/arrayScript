@@ -48,8 +48,14 @@ R = num::input()
 sections = tuple(N, num) # N:nombre d'items, num: type
 for i in range(R){
     I, J = num..split::input()
-    sections[I] = 1
-    sections[J] = 2
+    sections[I]++
+    sections[J]++
 }
 /* sections = + -> sections */
 output(" " -+- sections)
+ 
+  
+
+   
+    
+     

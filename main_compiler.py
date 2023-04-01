@@ -3,7 +3,7 @@ from parser_compiler import get_parser
 from pprint import pprint
 
 with open("exemple.arrs", "r", encoding="utf-8") as f:
-    code = f.read()
+    code = f.read().strip()
 
 with open("compiler.py", "w", encoding="utf-8") as f:
     f.write(get_lexer(code))
