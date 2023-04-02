@@ -153,24 +153,33 @@ class operator():
                 found_symbol = True
                 buffer = ""
         for i in pattern:
+            # print(f"{state=}")
             if i == " ":
                 check_symbol()
                 continue
             if i == "{":
-                if state == 1:
+                if state == 1 or state > 2:
                     raise ValueError("should have closed '{' in operator "+name+"'s definition")
                     # print("found symbol :", buffer)
-                state = 1
+                state += 1
                 check_symbol()
                 continue
             if i == "}":
                 if state == 0:
                     raise ValueError("should have opened '{' in operator "+name+"'s definition")
+                self.pattern.append("expr" if state == 1 else "OPERATOR")
                 state = 0
                 nb_args += 1
-                self.pattern.append("expr")
                 self.return_value.append(nb_args)
                 buffer = ""
+                continue
+            if i == "§":
+                if state > 0:
+                    raise ValueError("should have closed '{' in operator "+name+"'s definition")
+                    # print("found symbol :", buffer)
+                state = 2
+                # print("opened '<' in operator "+name+"'s definition", f"{state=}")
+                check_symbol()
                 continue
             buffer += i
         check_symbol()
@@ -191,8 +200,8 @@ operators = [
     operator("**","pow",3,"{a} ** {b}"),
     operator("-+-","join",1,"{a} -+- {b}"),
     operator("-|-","split",1,"{a} -|- {b}"),
-    operator("->","scan",4,"{a} -> {b}"),
-    operator("/>","reduc",4,"{a} /> {b}"),
+    operator("->","scan",4,"§{a} -> {b}"),
+    operator("/>","reduc",4,"§{a} /> {b}"),
     operator("&&","bitand",1,"{a} && {b}"),
     operator("||","bitor",1,"{a} || {b}"),
     operator("^","bitxor",1,"{a} ^ {b}"),
@@ -206,8 +215,8 @@ operators = [
     operator("not","not",0,"not {a}"),
     operator("++","incr",5,"{a} ++"),
     operator("--","decr",5,"{a} --"),
-    operator("+.","outer",1,"{a} +. {b} {c}"),
-    operator("-.","inner",1,"{a} {b} -. {c} {d}"),
+    operator("+.","outer",1,"{a} +. §{b} {c}"),
+    operator("-.","inner",1,"{a} §{b} -. §{c} {d}"),
     operator("<|>","reverse",5,"<|> {a}"),
     operator("-o-","rotate",4,"{a} -o- {b}"),
     operator(".","apply",4,"{a} . {b}"),

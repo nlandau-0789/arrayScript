@@ -23,6 +23,9 @@ def p_{op.__name__}(p):
 def format_types():
     return "\n         | ".join(x.__name__ for x in types)
 
+def format_operators():
+    return "\n         | ".join(x.__name__ for x in operators)
+
 def format_func_ret_val():
     return "\n               | ".join(map(lambda x : f"{x.__name__} '(' arguments ')'", types+funcs))
 
@@ -344,6 +347,12 @@ def p_noarg(p):
 #            | STRING_DQ
 #     '''
 #     p[0] = p[1]
+
+def p_OPERATOR(p):
+    '''
+    OPERATOR : {format_operators()}
+    '''
+    p[0] = ("operator", p[1])
 
 def p_error(p):
     if p:

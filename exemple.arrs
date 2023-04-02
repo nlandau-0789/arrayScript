@@ -25,7 +25,7 @@ operator ("S", "s_combinator" , 0, "S {f} {g} {x}"){
     return lambda x: f(x, g(x))
 }
 
-operator ("S2", "s2_combinator" , 0, "S2 {f} {g} {x}"){
+operator ("S", "s_combinator_2" , 0, "S §{f} §{g} {x}"){
     return lambda x: f(x, g(x))
 }
 
@@ -38,6 +38,7 @@ func dummy(num a){
 }
 
 func dummy2(num a, b; list c){
+    variable = nom[5:9]+90**2
     return Null
 }
 
@@ -48,14 +49,10 @@ R = num::input()
 sections = tuple(N, num) # N:nombre d'items, num: type
 for i in range(R){
     I, J = num..split::input()
-    sections[I]++
+    sections[I]--
     sections[J]++
 }
-/* sections = + -> sections */
-output(" " -+- sections)
- 
-  
-
-   
-    
-     
+sections = + -> sections
+output(" " -+- str..sections)
+output(a op op2 b)
+S + - aze
