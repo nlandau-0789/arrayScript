@@ -149,7 +149,7 @@ class operator():
                     raise ValueError("presence of symbol twice in "+name+"'s definition, which is not correct")
                 self.pattern.append(self.__name__)
                 nb_args += 1
-                self.return_value.insert(0, nb_args)
+                # self.return_value.insert(0, nb_args)
                 found_symbol = True
                 buffer = ""
         for i in pattern:
@@ -184,7 +184,7 @@ class operator():
             buffer += i
         check_symbol()
         self.pattern = " ".join(self.pattern)
-        self.return_value = f"p[0] = ({', '.join('p['+str(i)+']' for i in self.return_value)})"
+        self.return_value = f"p[0] = ('{self.__name__}', {', '.join('p['+str(i)+']' for i in self.return_value)})"
         self.tokenizer = f"""t_{self.__name__} = r'''{re.escape(symbol)}'''"""
         self.keyword = symbol
     
