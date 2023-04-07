@@ -1,46 +1,68 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#include <array>
+#include <sstream>
+#include <numeric>
 
 namespace arrs {
 
 namespace operators {
 
 template<typename A, typename B>
-auto operator_add(A a, B b){
-    
+inline auto operator_add(A a, B b){
+    return a + b;
 }
 
 template<typename A, typename B>
-auto operator_sub(A a, B b){
-    
+inline auto operator_sub(A a, B b){
+    return a - b;
 }
 
 template<typename A, typename B>
-auto operator_mul(A a, B b){
-    
+inline auto operator_mul(A a, B b){
+    return a * b;
 }
 
 template<typename A, typename B>
-auto operator_div(A a, B b){
-    
+inline auto operator_div(A a, B b){
+    return a / b;
 }
 
 template<typename A, typename B>
-auto operator_trudiv(A a, B b){
-    
+inline auto operator_trudiv(A a, B b){
+    return (double)a / (double)b;
 }
 
 template<typename A, typename B>
-auto operator_pow(A a, B b){
-    
+inline auto operator_pow(A a, B b){
+    return std::pow(a, b);
 }
 
-template<typename A, typename B>
-auto operator_join(A a, B b){
-    
+template<typename A>
+inline auto operator_join(std::string a, A b){
+    return std::accumulate(std::next(b.begin()), b.end(), b[0],
+        [a](const std::string& s1, const std::string& s2) -> std::string {
+            return s1 + a + s2;
+        });
 }
 
-template<typename A, typename B>
-auto operator_split(A a, B b){
-    
+// operator_split("+", "1+2+3") => ["1", "2", "3"]
+auto operator_split(std::string str, std::string delimiter){
+    std::vector<std::string> result;
+
+    std::string::size_type start = 0;
+    auto end = str.find(delimiter);
+
+    while (end != std::string::npos) {
+        result.push_back(str.substr(start, end - start));
+        start = end + delimiter.length();
+        end = str.find(delimiter, start);
+    }
+
+    result.push_back(str.substr(start));
+
+    return result;
 }
 
 template<typename A, typename B>
@@ -48,9 +70,19 @@ auto operator_scan(A a, B b){
     
 }
 
-template<typename A, typename B>
-auto operator_reduc(A a, B b){
-    
+template<typename A, typename B, typename C>
+auto operator_reduc(A op, B b){
+    auto first = b.begin();
+    auto last = b.end();
+    if (first == last) {
+        typename B::value_type default_ret = {};
+        return default_ret;
+    }
+    auto init = *first;
+    first++;
+    for (; first != last; ++first)
+        init = op(std::move(init), *first); 
+    return init;
 }
 
 template<typename A, typename B>
