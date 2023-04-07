@@ -365,6 +365,13 @@ def p_block_stmt(p):
     '''
     p[0] = tuple(list(p[1])+[p[3]])
 
+def p_block_stmt_empty(p):
+    '''
+    block_stmt : block_decl '{' '}'
+               | block_decl '{' newline '}'
+    '''
+    p[0] = (*p[1], [])
+
 def p_block_decl(p):
     '''
     block_decl : for_decl
@@ -426,6 +433,12 @@ def p_def_argument(p):
     def_arguments : declaration_stmt
     '''
     p[0] = [p[1]]
+
+def p_def_argument_empty(p):
+    '''
+    def_arguments : empty
+    '''
+    p[0] = []
 
 def p_def_arguments(p):
     '''

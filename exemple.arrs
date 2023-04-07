@@ -44,7 +44,7 @@ func dummy2(num a, b; list c){
 
 a = (1 + 3 * (5 + input::input()))
 
-N = num::input()
+func main(){N = num::input()
 R = num::input()
 sections = tuple(N, num) # N:nombre d'items, num: type
 for i in range(R){
@@ -55,4 +55,4 @@ for i in range(R){
 sections = + -> sections
 output(" " -+- str..sections)
 output(a op op2 b)
-S + - aze
+S + - aze}
