@@ -138,18 +138,18 @@ class operator():
         self.pattern = []
         buffer = ""
         state = 0
-        nb_args = 0
+        self.nb_args = 0
         found_symbol = False
         def check_symbol():
-            nonlocal buffer, found_symbol, nb_args
+            nonlocal buffer, found_symbol
             if buffer:
                 if buffer != self.symbol:
                     raise ValueError("presence of "+buffer+" symbol in "+name+"'s definition, which is not correct")
                 if found_symbol:
                     raise ValueError("presence of symbol twice in "+name+"'s definition, which is not correct")
                 self.pattern.append(self.__name__)
-                nb_args += 1
-                # self.return_value.insert(0, nb_args)
+                self.nb_args += 1
+                # self.return_value.insert(0, self.nb_args)
                 found_symbol = True
                 buffer = ""
         for i in pattern:
@@ -169,8 +169,8 @@ class operator():
                     raise ValueError("should have opened '{' in operator "+name+"'s definition")
                 self.pattern.append("expr" if state == 1 else "OPERATOR")
                 state = 0
-                nb_args += 1
-                self.return_value.append(nb_args)
+                self.nb_args += 1
+                self.return_value.append(self.nb_args)
                 buffer = ""
                 continue
             if i == "§":
