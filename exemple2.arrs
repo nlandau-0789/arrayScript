@@ -7,3 +7,8 @@ func f2(){
 func f3(num a){
     func f4(){}
 }
+
+a = 1
+a.f3()
+
+b = 1.2

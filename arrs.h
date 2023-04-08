@@ -188,75 +188,81 @@ auto operator_rotate(A a, B b){
     return b;
 }
 
-template<typename A, typename B>
-auto operator_apply(A a, B b){
-    auto 
-    return b()
-}
+
+// il faut solve apply a moment de la compilation
+// template<typename A, typename B>
+// auto operator_apply(A a, B b){
+//     auto 
+//     return b()
+// }
 
 template<typename A, typename B>
 auto operator_compose(A a, B b){
-    
+    return a(b);
 }
 
 template<typename A, typename B>
-auto operator_over(A a, B b){
-    
+auto operator_over(A a, const B& b){
+    std::transform(b.cbegin(), b.cend(), b.begin(), a);
+    return b;
 }
 
 template<typename A>
-auto operator_map(A a){
-    
+auto operator_map(const A& a){
+    return arrs::types::type_map(a);
 }
 
 template<typename A>
-auto operator_sorted_incr(A a){
-    
+auto operator_sorted_incr(const A& a){
+    std::sort(a.begin(), a.end());
+    return a;
 }
 
 template<typename A>
 auto operator_sorted_decr(A a){
-    
+    std::sort(a.begin(), a.end());
+    std::reverse(a.cbegin(), a.cend(), a.begin());
+    return a;
 }
 
 template<typename A, typename B>
-auto operator_less_than(A a, B b){
-    
+inline auto operator_less_than(A a, B b){
+    return a < b;
 }
 
 template<typename A, typename B>
-auto operator_less_than_equals(A a, B b){
-    
+inline auto operator_less_than_equals(A a, B b){
+    return a <= b;
 }
 
 template<typename A, typename B>
-auto operator_greater_than(A a, B b){
-    
+inline auto operator_greater_than(A a, B b){
+    return a > b;
 }
 
 template<typename A, typename B>
-auto operator_greater_than_equals(A a, B b){
-    
+inline auto operator_greater_than_equals(A a, B b){
+    return a >= b;
 }
 
 template<typename A, typename B>
-auto operator_equals(A a, B b){
-    
+inline auto operator_equals(A a, B b){
+    return a == b;
 }
 
 template<typename A, typename B>
-auto operator_not_equals(A a, B b){
-    
+inline auto operator_not_equals(A a, B b){
+    return a != b;
 }
 
 template<typename A, typename B>
-auto operator_smallest(A a, B b){
-    
+inline auto operator_smallest(A a, B b){
+    return std::min(a, b);
 }
 
 template<typename A, typename B>
-auto operator_greatest(A a, B b){
-    
+inline auto operator_greatest(A a, B b){
+    return std::max(a, b);
 }
 
 }
