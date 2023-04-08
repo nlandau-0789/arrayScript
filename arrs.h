@@ -2,8 +2,11 @@
 #include <string>
 #include <vector>
 #include <array>
+#include <algorithm>
 #include <sstream>
 #include <numeric>
+#include <functional>
+#include <type_traits>
 
 namespace arrs {
 
@@ -129,53 +132,66 @@ inline auto operator_xor(A a, B b){
 
 // il faudra implémenter la fonctions contains dans chaque type
 template<typename A, typename B>
-auto operator_contains(A a, B b){
+inline auto operator_contains(A a, B b){
     return b.contains(a);
 }
 
 template<typename A>
-auto operator_bitnot(A a){
-    
+inline auto operator_bitnot(A a){
+    return ~a;
 }
 
 template<typename A>
-auto operator_not(A a){
-    
+inline auto operator_not(A a){
+    return !a;
 }
 
 template<typename A>
-auto operator_incr(A a){
-    
+inline auto operator_incr(A& a){
+    return a++;
 }
 
 template<typename A>
-auto operator_decr(A a){
-    
+inline auto operator_decr(A& a){
+    return a--;
 }
 
-template<typename A, typename B, typename C>
-auto operator_outer(A a, B b, C c){
-    
+template<typename A, typename B, typename F>
+auto operator_outer(const A& a, F f, const B& b) {
+    typedef typename std::result_of<F(typename A::value_type, typename B::value_type)>::type T;
+    std::vector<std::vector<T>> result(a.size(), std::vector<T>(b.size()));
+    for (size_t i = 0; i < a.size(); ++i) {
+        for (size_t j = 0; j < b.size(); ++j) {
+            result[i][j] = f(a[i], b[j]);
+        }
+    }
+    return result;
 }
 
-template<typename A, typename B, typename C, typename D>
-auto operator_inner(A a, B b, C c, D d){
-    
+template<typename A, typename B, typename F1, typename F2>
+auto operator_inner(const A& a, F1 f1, F2 f2, const B& b) {
+    typedef typename std::result_of<F2(typename A::value_type, typename B::value_type)>::type T1;
+    typedef typename std::result_of<F1(T1, T1)>::type T2;
+    T2 init = {};
+    return std::inner_product(a.begin(), a.end(), b.begin(), init, f1, f2);
 }
 
 template<typename A>
-auto operator_reverse(A a){
-    
+auto operator_reverse(A& a){
+    std::reverse(a.begin(), a.end());
+    return a;
 }
 
 template<typename A, typename B>
 auto operator_rotate(A a, B b){
-    
+    std::rotate(b.begin(), b.begin() + a, b.end());
+    return b;
 }
 
 template<typename A, typename B>
 auto operator_apply(A a, B b){
-    
+    auto 
+    return b()
 }
 
 template<typename A, typename B>
