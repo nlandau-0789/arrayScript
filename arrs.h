@@ -66,11 +66,12 @@ auto operator_split(std::string str, std::string delimiter){
 }
 
 template<typename A, typename B>
-auto operator_scan(A a, B b){
-    
+auto operator_scan(A op, B b){
+    std::partial_sum(b.cbegin(), b.cend(), b.begin(), op);
+    return b;
 }
 
-template<typename A, typename B, typename C>
+template<typename A, typename B>
 auto operator_reduc(A op, B b){
     auto first = b.begin();
     auto last = b.end();
@@ -86,48 +87,50 @@ auto operator_reduc(A op, B b){
 }
 
 template<typename A, typename B>
-auto operator_bitand(A a, B b){
-    
+inline auto operator_bitand(A a, B b){
+    return a & b;
 }
 
 template<typename A, typename B>
-auto operator_bitor(A a, B b){
-    
+inline auto operator_bitor(A a, B b){
+    return a | b;
 }
 
 template<typename A, typename B>
-auto operator_bitxor(A a, B b){
-    
+inline auto operator_bitxor(A a, B b){
+    return a ^ b;
 }
 
 template<typename A, typename B>
-auto operator_bitshiftleft(A a, B b){
-    
+inline auto operator_bitshiftleft(A a, B b){
+    return a << b;
 }
 
 template<typename A, typename B>
-auto operator_bitshiftright(A a, B b){
-    
+inline auto operator_bitshiftright(A a, B b){
+    return a >> b;
 }
 
 template<typename A, typename B>
-auto operator_and(A a, B b){
-    
+inline auto operator_and(A a, B b){
+    return a && b;
 }
 
 template<typename A, typename B>
-auto operator_or(A a, B b){
-    
+inline auto operator_or(A a, B b){
+    return a || b;
 }
 
 template<typename A, typename B>
-auto operator_xor(A a, B b){
-    
+inline auto operator_xor(A a, B b){
+    return (a || b) && !(a && b);
 }
 
+
+// il faudra implémenter la fonctions contains dans chaque type
 template<typename A, typename B>
 auto operator_contains(A a, B b){
-    
+    return b.contains(a);
 }
 
 template<typename A>
