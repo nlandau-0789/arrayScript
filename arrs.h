@@ -268,11 +268,11 @@ inline auto operator_greatest(A a, B b){
 }
 namespace types {
 
-class type_type{
-public :
-    type_type(){}
-    ~type_type(){}
-};
+// class type_type{
+// public :
+//     type_type(){}
+//     ~type_type(){}
+// };
 
 class type_num{
 public :
@@ -280,83 +280,24 @@ public :
     ~type_num(){}
 };
 
-class type_bool{
-public :
-    type_bool(){}
-    ~type_bool(){}
-};
+typedef bool type_bool;
 
-class type_any{
-public :
-    type_any(){}
-    ~type_any(){}
-};
+#define type_any auto
 
-class type_u64{
-public :
-    type_u64(){}
-    ~type_u64(){}
-};
+typedef unsigned long long type_u64;
+typedef unsigned long type_u32;
+typedef unsigned short type_u16;
+typedef unsigned char type_u8;
 
-class type_u32{
-public :
-    type_u32(){}
-    ~type_u32(){}
-};
+typedef long long type_u64;
+typedef long type_u32;
+typedef short type_u16;
+typedef char type_u8;
 
-class type_u16{
-public :
-    type_u16(){}
-    ~type_u16(){}
-};
+typedef float type_f32;
+typedef double type_f64;
 
-class type_u8{
-public :
-    type_u8(){}
-    ~type_u8(){}
-};
-
-class type_i64{
-public :
-    type_i64(){}
-    ~type_i64(){}
-};
-
-class type_i32{
-public :
-    type_i32(){}
-    ~type_i32(){}
-};
-
-class type_i16{
-public :
-    type_i16(){}
-    ~type_i16(){}
-};
-
-class type_i8{
-public :
-    type_i8(){}
-    ~type_i8(){}
-};
-
-class type_f32{
-public :
-    type_f32(){}
-    ~type_f32(){}
-};
-
-class type_f64{
-public :
-    type_f64(){}
-    ~type_f64(){}
-};
-
-class type_str{
-public :
-    type_str(){}
-    ~type_str(){}
-};
+typedef std::string str;
 
 class type_list{
 public :
