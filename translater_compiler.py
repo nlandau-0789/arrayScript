@@ -8,8 +8,14 @@ def get_translater(code):
     return \
 f"""
 
+def translate(stmt):
+    
+
 def run(p):
-    program = ""
+    program = "#include <arrs.cpp>\n\n"
+    for i in p:
+        program += translate(i)
+    print(program)
     
     
 
