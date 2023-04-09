@@ -184,16 +184,18 @@ def p_program(p):
     '''
     program : stmts
     '''
-    pprint(p[1], indent=4)
-    p[0] = p[1]
+    # pprint(p[1], indent=4)
+    # p[0] = p[1]
+    run(p[1])
 
 def p_program2(p):
     '''
     program : newline stmts
             | newline stmts newline
     '''
-    pprint(p[2], indent=4)
-    p[0] = p[2]
+    # pprint(p[2], indent=4)
+    # p[0] = p[2]
+    run(p[2])
 
 def p_newline(p):
     '''
@@ -985,5 +987,28 @@ def p_error(p):
     else:
         print("Syntax error at EOF")
 
+# parser = yacc.yacc(debug=True)
+
+
+
+def translate(stmt):
+    pass
+
+def run(p):
+    print(p)
+    # program = "#include <arrs.cpp>\n\n"
+    # for i in p:
+    #     program += translate(i)
+    # print(program)
+
 parser = yacc.yacc(debug=True)
+    
+    
+
+
+
+
+
+
+
 

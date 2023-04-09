@@ -6,16 +6,19 @@ def get_translater(code):
     operators.extend(extra_compile_data.get_new_operators(code))
     types.extend(extra_compile_data.get_new_structs(code))
     return \
-f"""
+rf"""
 
 def translate(stmt):
-    
+    pass
 
 def run(p):
-    program = "#include <arrs.cpp>\n\n"
-    for i in p:
-        program += translate(i)
-    print(program)
+    print(p)
+    # program = "#include <arrs.cpp>\n\n"
+    # for i in p:
+    #     program += translate(i)
+    # print(program)
+
+parser = yacc.yacc(debug=True)
     
     
 

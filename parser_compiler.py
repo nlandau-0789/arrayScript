@@ -59,7 +59,8 @@ def p_program(p):
     program : stmts
     '''
     # pprint(p[1], indent=4)
-    p[0] = p[1]
+    # p[0] = p[1]
+    run(p[1])
 
 def p_program2(p):
     '''
@@ -67,7 +68,8 @@ def p_program2(p):
             | newline stmts newline
     '''
     # pprint(p[2], indent=4)
-    p[0] = p[2]
+    # p[0] = p[2]
+    run(p[2])
 
 def p_newline(p):
     '''
@@ -375,6 +377,6 @@ def p_error(p):
     else:
         print("Syntax error at EOF")
 
-parser = yacc.yacc(debug=True)
+# parser = yacc.yacc(debug=True)
 
 """

@@ -20,10 +20,10 @@ with open("compiler.py", "a", encoding="utf-8") as f:
 # lexer.input(code)
 # pprint(list(lexer))
 
-# from compiler import parser
+from compiler import parser
 
-# parser.parse(code)
+parser.parse(code)
 
-from compiler import translater
+# from compiler import translater
 
-translater.translate(code)
+# translater.translate(code)
