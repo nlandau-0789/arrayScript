@@ -94,6 +94,7 @@ class STRING_3SQ():
     tokenizer = rf'''
 def t_STRING_3SQ(t):
     r"""{match_string}"""
+    t.value = json.dumps(eval(t.value))
     return t'''
 
 class STRING_3DQ():
@@ -101,6 +102,7 @@ class STRING_3DQ():
     tokenizer = rf"""
 def t_STRING_3DQ(t):
     r'''{match_string}'''
+    t.value = json.dumps(eval(t.value))
     return t"""
 
 class STRING_SQ():
@@ -108,6 +110,7 @@ class STRING_SQ():
     tokenizer = rf'''
 def t_STRING_SQ(t):
     r"""{match_string}"""
+    t.value = json.dumps(eval(t.value))
     return t'''
 
 class STRING_DQ():
@@ -115,6 +118,7 @@ class STRING_DQ():
     tokenizer = rf'''
 def t_STRING_DQ(t):
     r"""{match_string}"""
+    t.value = json.dumps(eval(t.value))
     return t'''
 
 consts_types = [
@@ -184,7 +188,7 @@ class operator():
             buffer += i
         check_symbol()
         self.pattern = " ".join(self.pattern)
-        self.return_value = f"p[0] = ('{self.__name__}', {', '.join('p['+str(i)+']' for i in self.return_value)})"
+        self.return_value = f"p[0] = ('call', '{self.__name__}', [{', '.join('p['+str(i)+']' for i in self.return_value)}])"
         self.tokenizer = f"""t_{self.__name__} = r'''{re.escape(symbol)}'''"""
         self.keyword = symbol
     

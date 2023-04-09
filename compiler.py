@@ -1,5 +1,6 @@
 from ply import *
 from pprint import pprint
+import json
 
 tokens = ('FLOAT', 'NUM', 'STRING_3SQ', 'STRING_3DQ', 'STRING_SQ', 'STRING_DQ', 'true', 'Null', 'false', 'for', 'while', 'if', 'else', 'elif', 'func', 'struct', 'operator', 'return', 'break', 'continue', 'del', 'lambda', 'pass', 'operator_add', 'operator_sub', 'operator_mul', 'operator_div', 'operator_trudiv', 'operator_pow', 'operator_join', 'operator_split', 'operator_scan', 'operator_reduc', 'operator_bitand', 'operator_bitor', 'operator_bitxor', 'operator_bitshiftleft', 'operator_bitshiftright', 'operator_and', 'operator_or', 'operator_xor', 'operator_contains', 'operator_bitnot', 'operator_not', 'operator_incr', 'operator_decr', 'operator_outer', 'operator_inner', 'operator_reverse', 'operator_rotate', 'operator_apply', 'operator_compose', 'operator_over', 'operator_map', 'operator_sorted_incr', 'operator_sorted_decr', 'operator_less_than', 'operator_less_than_equals', 'operator_greater_than', 'operator_greater_than_equals', 'operator_equals', 'operator_not_equals', 'operator_smallest', 'operator_greatest', 'type_type', 'type_num', 'type_bool', 'type_any', 'type_u64', 'type_u32', 'type_u16', 'type_u8', 'type_i64', 'type_i32', 'type_i16', 'type_i8', 'type_f32', 'type_f64', 'type_str', 'type_list', 'type_tuple', 'type_array', 'type_vector', 'type_dict', 'type_generator', 'type_linked_list', 'type_doubly_linked_list', 'type_deque', 'type_heap', 'type_fibonacci_heap', 'type_tree', 'type_trie', 'type_stack', 'type_queue', 'type_binary_search_tree', 'type_bitset', 'type_set', 'type_map', 'type_range', 'type_bad_struct', 'type_bad_struct2', 'operator_goodname', 'operator_s_combinator', 'operator_s_combinator_2', 'operator_goodname2', 'VAR', 'NEWLINE')
 
@@ -15,18 +16,22 @@ def t_NUM(t):
 
 def t_STRING_3SQ(t):
     r"""\'\'\'([^\\\n]|(\\.))*?\'\'\'"""
+    t.value = json.dumps(eval(t.value))
     return t
 
 def t_STRING_3DQ(t):
     r'''\"\"\"([^\\\n]|(\\.))*?\"\"\"'''
+    t.value = json.dumps(eval(t.value))
     return t
 
 def t_STRING_SQ(t):
     r"""\'([^\\\n]|(\\.))*?\'"""
+    t.value = json.dumps(eval(t.value))
     return t
 
 def t_STRING_DQ(t):
     r"""\"([^\\\n]|(\\.))*?\""""
+    t.value = json.dumps(eval(t.value))
     return t
 t_true = r'''true'''
 t_Null = r'''Null'''
@@ -177,6 +182,9 @@ lexer = lex.lex()
 
 
 precedence = (("left", "="), ('left', 'operator_and', 'operator_or', 'operator_xor', 'operator_contains', 'operator_not', 'operator_less_than', 'operator_less_than_equals', 'operator_greater_than', 'operator_greater_than_equals', 'operator_equals', 'operator_not_equals', 'operator_smallest', 'operator_greatest', 'operator_s_combinator', 'operator_s_combinator_2'), ('left', 'operator_add', 'operator_sub', 'operator_join', 'operator_split', 'operator_bitand', 'operator_bitor', 'operator_bitxor', 'operator_bitshiftleft', 'operator_bitshiftright', 'operator_outer', 'operator_inner'), ('left', 'operator_mul', 'operator_div', 'operator_trudiv'), ('left', 'operator_pow'), ('left', 'operator_scan', 'operator_reduc', 'operator_rotate', 'operator_apply'), ('left', 'operator_bitnot', 'operator_incr', 'operator_decr', 'operator_reverse', 'operator_sorted_incr', 'operator_sorted_decr', 'operator_goodname'), ('left', 'operator_map'), ('left', 'operator_over'), ('left', 'operator_compose'), ('left', 'operator_goodname2'))
+
+def get_operator_name(symbol):
+    return {'+': 'operator_add', '-': 'operator_sub', '*': 'operator_mul', '//': 'operator_div', '/': 'operator_trudiv', '**': 'operator_pow', '-+-': 'operator_join', '-|-': 'operator_split', '->': 'operator_scan', '/>': 'operator_reduc', '&&': 'operator_bitand', '||': 'operator_bitor', '^': 'operator_bitxor', '<<': 'operator_bitshiftleft', '>>': 'operator_bitshiftright', 'and': 'operator_and', 'or': 'operator_or', 'xor': 'operator_xor', 'in': 'operator_contains', '~': 'operator_bitnot', 'not': 'operator_not', '++': 'operator_incr', '--': 'operator_decr', '+.': 'operator_outer', '-.': 'operator_inner', '<|>': 'operator_reverse', '-o-': 'operator_rotate', '.': 'operator_apply', '::': 'operator_compose', '..': 'operator_over', '[]': 'operator_map', '>_>': 'operator_sorted_incr', '<_<': 'operator_sorted_decr', '<': 'operator_less_than', '<=': 'operator_less_than_equals', '>': 'operator_greater_than', '>=': 'operator_greater_than_equals', '==': 'operator_equals', '!=': 'operator_not_equals', '<?': 'operator_smallest', '>?': 'operator_greatest', 'op': 'operator_goodname', 'S': 'operator_s_combinator_2', 'op2': 'operator_goodname2'}[symbol]
 
 start = 'program'
 
@@ -476,7 +484,7 @@ def p_operator_add(p):
     expr : expr operator_add expr
     '''
     # print("+", p.lexer.lineno)
-    p[0] = ('operator_add', p[1], p[3])
+    p[0] = ('call', 'operator_add', [p[1], p[3]])
 
 
 def p_operator_sub(p):
@@ -484,7 +492,7 @@ def p_operator_sub(p):
     expr : expr operator_sub expr
     '''
     # print("-", p.lexer.lineno)
-    p[0] = ('operator_sub', p[1], p[3])
+    p[0] = ('call', 'operator_sub', [p[1], p[3]])
 
 
 def p_operator_mul(p):
@@ -492,7 +500,7 @@ def p_operator_mul(p):
     expr : expr operator_mul expr
     '''
     # print("*", p.lexer.lineno)
-    p[0] = ('operator_mul', p[1], p[3])
+    p[0] = ('call', 'operator_mul', [p[1], p[3]])
 
 
 def p_operator_div(p):
@@ -500,7 +508,7 @@ def p_operator_div(p):
     expr : expr operator_div expr
     '''
     # print("//", p.lexer.lineno)
-    p[0] = ('operator_div', p[1], p[3])
+    p[0] = ('call', 'operator_div', [p[1], p[3]])
 
 
 def p_operator_trudiv(p):
@@ -508,7 +516,7 @@ def p_operator_trudiv(p):
     expr : expr operator_trudiv expr
     '''
     # print("/", p.lexer.lineno)
-    p[0] = ('operator_trudiv', p[1], p[3])
+    p[0] = ('call', 'operator_trudiv', [p[1], p[3]])
 
 
 def p_operator_pow(p):
@@ -516,7 +524,7 @@ def p_operator_pow(p):
     expr : expr operator_pow expr
     '''
     # print("**", p.lexer.lineno)
-    p[0] = ('operator_pow', p[1], p[3])
+    p[0] = ('call', 'operator_pow', [p[1], p[3]])
 
 
 def p_operator_join(p):
@@ -524,7 +532,7 @@ def p_operator_join(p):
     expr : expr operator_join expr
     '''
     # print("-+-", p.lexer.lineno)
-    p[0] = ('operator_join', p[1], p[3])
+    p[0] = ('call', 'operator_join', [p[1], p[3]])
 
 
 def p_operator_split(p):
@@ -532,7 +540,7 @@ def p_operator_split(p):
     expr : expr operator_split expr
     '''
     # print("-|-", p.lexer.lineno)
-    p[0] = ('operator_split', p[1], p[3])
+    p[0] = ('call', 'operator_split', [p[1], p[3]])
 
 
 def p_operator_scan(p):
@@ -540,7 +548,7 @@ def p_operator_scan(p):
     expr : OPERATOR operator_scan expr
     '''
     # print("->", p.lexer.lineno)
-    p[0] = ('operator_scan', p[1], p[3])
+    p[0] = ('call', 'operator_scan', [p[1], p[3]])
 
 
 def p_operator_reduc(p):
@@ -548,7 +556,7 @@ def p_operator_reduc(p):
     expr : OPERATOR operator_reduc expr
     '''
     # print("/>", p.lexer.lineno)
-    p[0] = ('operator_reduc', p[1], p[3])
+    p[0] = ('call', 'operator_reduc', [p[1], p[3]])
 
 
 def p_operator_bitand(p):
@@ -556,7 +564,7 @@ def p_operator_bitand(p):
     expr : expr operator_bitand expr
     '''
     # print("&&", p.lexer.lineno)
-    p[0] = ('operator_bitand', p[1], p[3])
+    p[0] = ('call', 'operator_bitand', [p[1], p[3]])
 
 
 def p_operator_bitor(p):
@@ -564,7 +572,7 @@ def p_operator_bitor(p):
     expr : expr operator_bitor expr
     '''
     # print("||", p.lexer.lineno)
-    p[0] = ('operator_bitor', p[1], p[3])
+    p[0] = ('call', 'operator_bitor', [p[1], p[3]])
 
 
 def p_operator_bitxor(p):
@@ -572,7 +580,7 @@ def p_operator_bitxor(p):
     expr : expr operator_bitxor expr
     '''
     # print("^", p.lexer.lineno)
-    p[0] = ('operator_bitxor', p[1], p[3])
+    p[0] = ('call', 'operator_bitxor', [p[1], p[3]])
 
 
 def p_operator_bitshiftleft(p):
@@ -580,7 +588,7 @@ def p_operator_bitshiftleft(p):
     expr : expr operator_bitshiftleft expr
     '''
     # print("<<", p.lexer.lineno)
-    p[0] = ('operator_bitshiftleft', p[1], p[3])
+    p[0] = ('call', 'operator_bitshiftleft', [p[1], p[3]])
 
 
 def p_operator_bitshiftright(p):
@@ -588,7 +596,7 @@ def p_operator_bitshiftright(p):
     expr : expr operator_bitshiftright expr
     '''
     # print(">>", p.lexer.lineno)
-    p[0] = ('operator_bitshiftright', p[1], p[3])
+    p[0] = ('call', 'operator_bitshiftright', [p[1], p[3]])
 
 
 def p_operator_and(p):
@@ -596,7 +604,7 @@ def p_operator_and(p):
     expr : expr operator_and expr
     '''
     # print("and", p.lexer.lineno)
-    p[0] = ('operator_and', p[1], p[3])
+    p[0] = ('call', 'operator_and', [p[1], p[3]])
 
 
 def p_operator_or(p):
@@ -604,7 +612,7 @@ def p_operator_or(p):
     expr : expr operator_or expr
     '''
     # print("or", p.lexer.lineno)
-    p[0] = ('operator_or', p[1], p[3])
+    p[0] = ('call', 'operator_or', [p[1], p[3]])
 
 
 def p_operator_xor(p):
@@ -612,7 +620,7 @@ def p_operator_xor(p):
     expr : expr operator_xor expr
     '''
     # print("xor", p.lexer.lineno)
-    p[0] = ('operator_xor', p[1], p[3])
+    p[0] = ('call', 'operator_xor', [p[1], p[3]])
 
 
 def p_operator_contains(p):
@@ -620,7 +628,7 @@ def p_operator_contains(p):
     expr : expr operator_contains expr
     '''
     # print("in", p.lexer.lineno)
-    p[0] = ('operator_contains', p[1], p[3])
+    p[0] = ('call', 'operator_contains', [p[1], p[3]])
 
 
 def p_operator_bitnot(p):
@@ -628,7 +636,7 @@ def p_operator_bitnot(p):
     expr : operator_bitnot expr
     '''
     # print("~", p.lexer.lineno)
-    p[0] = ('operator_bitnot', p[2])
+    p[0] = ('call', 'operator_bitnot', [p[2]])
 
 
 def p_operator_not(p):
@@ -636,7 +644,7 @@ def p_operator_not(p):
     expr : operator_not expr
     '''
     # print("not", p.lexer.lineno)
-    p[0] = ('operator_not', p[2])
+    p[0] = ('call', 'operator_not', [p[2]])
 
 
 def p_operator_incr(p):
@@ -644,7 +652,7 @@ def p_operator_incr(p):
     expr : expr operator_incr
     '''
     # print("++", p.lexer.lineno)
-    p[0] = ('operator_incr', p[1])
+    p[0] = ('call', 'operator_incr', [p[1]])
 
 
 def p_operator_decr(p):
@@ -652,7 +660,7 @@ def p_operator_decr(p):
     expr : expr operator_decr
     '''
     # print("--", p.lexer.lineno)
-    p[0] = ('operator_decr', p[1])
+    p[0] = ('call', 'operator_decr', [p[1]])
 
 
 def p_operator_outer(p):
@@ -660,7 +668,7 @@ def p_operator_outer(p):
     expr : expr operator_outer OPERATOR expr
     '''
     # print("+.", p.lexer.lineno)
-    p[0] = ('operator_outer', p[1], p[3], p[4])
+    p[0] = ('call', 'operator_outer', [p[1], p[3], p[4]])
 
 
 def p_operator_inner(p):
@@ -668,7 +676,7 @@ def p_operator_inner(p):
     expr : expr OPERATOR operator_inner OPERATOR expr
     '''
     # print("-.", p.lexer.lineno)
-    p[0] = ('operator_inner', p[1], p[2], p[4], p[5])
+    p[0] = ('call', 'operator_inner', [p[1], p[2], p[4], p[5]])
 
 
 def p_operator_reverse(p):
@@ -676,7 +684,7 @@ def p_operator_reverse(p):
     expr : operator_reverse expr
     '''
     # print("<|>", p.lexer.lineno)
-    p[0] = ('operator_reverse', p[2])
+    p[0] = ('call', 'operator_reverse', [p[2]])
 
 
 def p_operator_rotate(p):
@@ -684,7 +692,7 @@ def p_operator_rotate(p):
     expr : expr operator_rotate expr
     '''
     # print("-o-", p.lexer.lineno)
-    p[0] = ('operator_rotate', p[1], p[3])
+    p[0] = ('call', 'operator_rotate', [p[1], p[3]])
 
 
 def p_operator_apply(p):
@@ -692,7 +700,7 @@ def p_operator_apply(p):
     expr : expr operator_apply expr
     '''
     # print(".", p.lexer.lineno)
-    p[0] = ('operator_apply', p[1], p[3])
+    p[0] = ('call', 'operator_apply', [p[1], p[3]])
 
 
 def p_operator_compose(p):
@@ -700,7 +708,7 @@ def p_operator_compose(p):
     expr : expr operator_compose expr
     '''
     # print("::", p.lexer.lineno)
-    p[0] = ('operator_compose', p[1], p[3])
+    p[0] = ('call', 'operator_compose', [p[1], p[3]])
 
 
 def p_operator_over(p):
@@ -708,7 +716,7 @@ def p_operator_over(p):
     expr : expr operator_over expr
     '''
     # print("..", p.lexer.lineno)
-    p[0] = ('operator_over', p[1], p[3])
+    p[0] = ('call', 'operator_over', [p[1], p[3]])
 
 
 def p_operator_map(p):
@@ -716,7 +724,7 @@ def p_operator_map(p):
     expr : expr operator_map
     '''
     # print("[]", p.lexer.lineno)
-    p[0] = ('operator_map', p[1])
+    p[0] = ('call', 'operator_map', [p[1]])
 
 
 def p_operator_sorted_incr(p):
@@ -724,7 +732,7 @@ def p_operator_sorted_incr(p):
     expr : operator_sorted_incr expr
     '''
     # print(">_>", p.lexer.lineno)
-    p[0] = ('operator_sorted_incr', p[2])
+    p[0] = ('call', 'operator_sorted_incr', [p[2]])
 
 
 def p_operator_sorted_decr(p):
@@ -732,7 +740,7 @@ def p_operator_sorted_decr(p):
     expr : operator_sorted_decr expr
     '''
     # print("<_<", p.lexer.lineno)
-    p[0] = ('operator_sorted_decr', p[2])
+    p[0] = ('call', 'operator_sorted_decr', [p[2]])
 
 
 def p_operator_less_than(p):
@@ -740,7 +748,7 @@ def p_operator_less_than(p):
     expr : expr operator_less_than expr
     '''
     # print("<", p.lexer.lineno)
-    p[0] = ('operator_less_than', p[1], p[3])
+    p[0] = ('call', 'operator_less_than', [p[1], p[3]])
 
 
 def p_operator_less_than_equals(p):
@@ -748,7 +756,7 @@ def p_operator_less_than_equals(p):
     expr : expr operator_less_than_equals expr
     '''
     # print("<=", p.lexer.lineno)
-    p[0] = ('operator_less_than_equals', p[1], p[3])
+    p[0] = ('call', 'operator_less_than_equals', [p[1], p[3]])
 
 
 def p_operator_greater_than(p):
@@ -756,7 +764,7 @@ def p_operator_greater_than(p):
     expr : expr operator_greater_than expr
     '''
     # print(">", p.lexer.lineno)
-    p[0] = ('operator_greater_than', p[1], p[3])
+    p[0] = ('call', 'operator_greater_than', [p[1], p[3]])
 
 
 def p_operator_greater_than_equals(p):
@@ -764,7 +772,7 @@ def p_operator_greater_than_equals(p):
     expr : expr operator_greater_than_equals expr
     '''
     # print(">=", p.lexer.lineno)
-    p[0] = ('operator_greater_than_equals', p[1], p[3])
+    p[0] = ('call', 'operator_greater_than_equals', [p[1], p[3]])
 
 
 def p_operator_equals(p):
@@ -772,7 +780,7 @@ def p_operator_equals(p):
     expr : expr operator_equals expr
     '''
     # print("==", p.lexer.lineno)
-    p[0] = ('operator_equals', p[1], p[3])
+    p[0] = ('call', 'operator_equals', [p[1], p[3]])
 
 
 def p_operator_not_equals(p):
@@ -780,7 +788,7 @@ def p_operator_not_equals(p):
     expr : expr operator_not_equals expr
     '''
     # print("!=", p.lexer.lineno)
-    p[0] = ('operator_not_equals', p[1], p[3])
+    p[0] = ('call', 'operator_not_equals', [p[1], p[3]])
 
 
 def p_operator_smallest(p):
@@ -788,7 +796,7 @@ def p_operator_smallest(p):
     expr : expr operator_smallest expr
     '''
     # print("<?", p.lexer.lineno)
-    p[0] = ('operator_smallest', p[1], p[3])
+    p[0] = ('call', 'operator_smallest', [p[1], p[3]])
 
 
 def p_operator_greatest(p):
@@ -796,7 +804,7 @@ def p_operator_greatest(p):
     expr : expr operator_greatest expr
     '''
     # print(">?", p.lexer.lineno)
-    p[0] = ('operator_greatest', p[1], p[3])
+    p[0] = ('call', 'operator_greatest', [p[1], p[3]])
 
 
 def p_operator_goodname(p):
@@ -804,7 +812,7 @@ def p_operator_goodname(p):
     expr : expr operator_goodname expr
     '''
     # print("op", p.lexer.lineno)
-    p[0] = ('operator_goodname', p[1], p[3])
+    p[0] = ('call', 'operator_goodname', [p[1], p[3]])
 
 
 def p_operator_s_combinator(p):
@@ -812,7 +820,7 @@ def p_operator_s_combinator(p):
     expr : operator_s_combinator expr expr expr
     '''
     # print("S", p.lexer.lineno)
-    p[0] = ('operator_s_combinator', p[2], p[3], p[4])
+    p[0] = ('call', 'operator_s_combinator', [p[2], p[3], p[4]])
 
 
 def p_operator_s_combinator_2(p):
@@ -820,7 +828,7 @@ def p_operator_s_combinator_2(p):
     expr : operator_s_combinator_2 OPERATOR OPERATOR expr
     '''
     # print("S", p.lexer.lineno)
-    p[0] = ('operator_s_combinator_2', p[2], p[3], p[4])
+    p[0] = ('call', 'operator_s_combinator_2', [p[2], p[3], p[4]])
 
 
 def p_operator_goodname2(p):
@@ -828,7 +836,7 @@ def p_operator_goodname2(p):
     expr : operator_goodname2 expr
     '''
     # print("op2", p.lexer.lineno)
-    p[0] = ('operator_goodname2', p[2])
+    p[0] = ('call', 'operator_goodname2', [p[2]])
 
 
 
@@ -888,10 +896,16 @@ def p_expr(p):
     expr : const_val 
          | return_val
          | lambda_decl
-         | TYPE
     '''
     # print(p[1], p.lexer.lineno)
     p[0] = p[1]
+
+def p_expr2(p):
+    '''
+    expr : TYPE
+    '''
+    # print(p[1], p.lexer.lineno)
+    p[0] = ("var", "make_"+p[1][1])
 
 def p_empty(p):
     'empty :'
@@ -977,7 +991,7 @@ def p_OPERATOR(p):
          | operator_s_combinator_2
          | operator_goodname2
     '''
-    p[0] = ("operator", p[1])
+    p[0] = ("var", get_operator_name(p[1]))
 
 def p_error(p):
     if p:

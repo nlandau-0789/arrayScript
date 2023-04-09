@@ -50,6 +50,13 @@ arrs_h.write("""
 arrs_h.write("""
 namespace funcs {
 """)
+for i in types:
+    arrs_h.write(\
+f"""
+template<typename T>
+arrs::types::{i.__name__} make_{i.__name__}(T){{}};
+"""
+)
 
 for i in funcs:
     arrs_h.write(\

@@ -424,5 +424,110 @@ public :
 }
 namespace funcs {
 
+template<typename T>
+arrs::types::type_type make_type_type(T){};
+
+template<typename T>
+arrs::types::type_num make_type_num(T){};
+
+template<typename T>
+arrs::types::type_bool make_type_bool(T){};
+
+template<typename T>
+arrs::types::type_any make_type_any(T){};
+
+template<typename T>
+arrs::types::type_u64 make_type_u64(T){};
+
+template<typename T>
+arrs::types::type_u32 make_type_u32(T){};
+
+template<typename T>
+arrs::types::type_u16 make_type_u16(T){};
+
+template<typename T>
+arrs::types::type_u8 make_type_u8(T){};
+
+template<typename T>
+arrs::types::type_i64 make_type_i64(T){};
+
+template<typename T>
+arrs::types::type_i32 make_type_i32(T){};
+
+template<typename T>
+arrs::types::type_i16 make_type_i16(T){};
+
+template<typename T>
+arrs::types::type_i8 make_type_i8(T){};
+
+template<typename T>
+arrs::types::type_f32 make_type_f32(T){};
+
+template<typename T>
+arrs::types::type_f64 make_type_f64(T){};
+
+template<typename T>
+arrs::types::type_str make_type_str(T){};
+
+template<typename T>
+arrs::types::type_list make_type_list(T){};
+
+template<typename T>
+arrs::types::type_tuple make_type_tuple(T){};
+
+template<typename T>
+arrs::types::type_array make_type_array(T){};
+
+template<typename T>
+arrs::types::type_vector make_type_vector(T){};
+
+template<typename T>
+arrs::types::type_dict make_type_dict(T){};
+
+template<typename T>
+arrs::types::type_generator make_type_generator(T){};
+
+template<typename T>
+arrs::types::type_linked_list make_type_linked_list(T){};
+
+template<typename T>
+arrs::types::type_doubly_linked_list make_type_doubly_linked_list(T){};
+
+template<typename T>
+arrs::types::type_deque make_type_deque(T){};
+
+template<typename T>
+arrs::types::type_heap make_type_heap(T){};
+
+template<typename T>
+arrs::types::type_fibonacci_heap make_type_fibonacci_heap(T){};
+
+template<typename T>
+arrs::types::type_tree make_type_tree(T){};
+
+template<typename T>
+arrs::types::type_trie make_type_trie(T){};
+
+template<typename T>
+arrs::types::type_stack make_type_stack(T){};
+
+template<typename T>
+arrs::types::type_queue make_type_queue(T){};
+
+template<typename T>
+arrs::types::type_binary_search_tree make_type_binary_search_tree(T){};
+
+template<typename T>
+arrs::types::type_bitset make_type_bitset(T){};
+
+template<typename T>
+arrs::types::type_set make_type_set(T){};
+
+template<typename T>
+arrs::types::type_map make_type_map(T){};
+
+template<typename T>
+arrs::types::type_range make_type_range(T){};
+
 }
 }

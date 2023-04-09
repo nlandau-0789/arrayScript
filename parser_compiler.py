@@ -47,10 +47,14 @@ def format_precedence():
 
 def get_parser(code):
     operators.extend(extra_compile_data.get_new_operators(code))
+    operators_dict = {op.symbol : op.__name__ for op in operators}
     types.extend(extra_compile_data.get_new_structs(code))
     return \
 f"""
 {format_precedence()}
+
+def get_operator_name(symbol):
+    return {operators_dict}[symbol]
 
 start = 'program'
 
@@ -322,10 +326,16 @@ def p_expr(p):
     expr : const_val 
          | return_val
          | lambda_decl
-         | TYPE
     '''
     # print(p[1], p.lexer.lineno)
     p[0] = p[1]
+
+def p_expr2(p):
+    '''
+    expr : TYPE
+    '''
+    # print(p[1], p.lexer.lineno)
+    p[0] = ("var", "make_"+p[1][1])
 
 def p_empty(p):
     'empty :'
@@ -367,7 +377,7 @@ def p_OPERATOR(p):
     '''
     OPERATOR : {format_operators()}
     '''
-    p[0] = ("operator", p[1])
+    p[0] = ("var", get_operator_name(p[1]))
 
 def p_error(p):
     if p:

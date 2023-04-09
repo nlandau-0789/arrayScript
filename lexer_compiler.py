@@ -16,6 +16,7 @@ def get_lexer(code):
     tokens.extend(extra_compile_data.get_new_operators(code))
     return """from ply import *
 from pprint import pprint
+import json
 
 tokens = (""" + ", ".join(map(lambda x: repr(x.__name__), tokens)) + """, 'VAR', 'NEWLINE')
 """ + "\n".join(map(lambda x: x.tokenizer, tokens)) + f"""

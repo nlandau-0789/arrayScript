@@ -56,3 +56,9 @@ sections = + -> sections
 output(" " -+- str..sections)
 output(a op op2 b)
 S + - aze}
+
+output(123)
+
+input.output()
+
+I, J = num..split::input()
