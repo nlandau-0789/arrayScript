@@ -428,6 +428,86 @@ public :
 
 }
 namespace funcs {
+#ifndef ALT2
+template<typename T, std::size_t i = 0, std::size_t j = std::tuple_size<T>::value>
+struct tuple_compare {
+    static bool
+    one_equal(T const& lhs, T const& rhs) {
+        if constexpr(i == j) return false;
+        else {
+            return (std::get<i>(lhs) == std::get<i>(rhs) ||
+            tuple_compare<T, i + 1, j>::one_equal(lhs, rhs));
+        }
+    }
+};
+#endif
 
+template<typename... Conts>
+struct container_ref_tuple {
+    static auto constexpr get_begin{[](auto&&... args){return std::make_tuple(begin(args)...);}};
+
+    typename std::invoke_result<decltype(&std::forward_as_tuple<Conts...>), Conts&&...>::type m_refs;
+
+    struct iterator {
+        typename std::invoke_result<decltype(get_begin), Conts&&...>::type m_iterators;
+
+        decltype(auto)
+        operator++() {
+            apply([](auto&... args) {((++args), ...);}, m_iterators);
+            return (*this);
+        }
+
+        #ifndef ALT2
+        //Alternative 1(safe)
+        //will stop when it reaches the end of the shortest container
+        auto
+        operator!=(iterator const& rhs) const {
+            return !tuple_compare<decltype(m_iterators)>::one_equal(m_iterators, rhs.m_iterators);
+        }
+        #else
+        //Alternative 2 (probably faster, but unsafe):
+        //use only, if first container is shortest
+        auto
+        operator!=(iterator const& rhs) const {
+            return std::get<0>(m_iterators) != std::get<0>(rhs.m_iterators);
+        }
+        #endif
+
+        auto
+        operator*() const {
+            return apply([](auto&... args){return std::forward_as_tuple(*args...);}, m_iterators);
+        }
+    };
+
+    auto
+    begin() const {
+        return iterator{apply(get_begin, m_refs)};
+    }
+
+    #ifndef ALT2
+    //Alternative 1(safe)
+    //will stop when it reaches the end of the shortest container
+    static auto constexpr get_end{[](auto&&... args){return std::make_tuple(end(args)...);}};
+    auto
+    end() const {
+        return iterator{apply(get_end, m_refs)};
+    }
+    #else
+    //Alternative 2 (probably faster, but unsafe):
+    //use only, if first container is shortest
+    auto
+    end() const {
+        iterator ret;
+        std::get<0>(ret.m_iterators) = std::end(std::get<0>(m_refs));
+        return ret;
+    }
+    #endif
+};
+
+template<typename... Conts>
+auto
+zip(Conts&&... conts) {
+    return container_ref_tuple<Conts...>{std::forward_as_tuple(conts...)};
+}
 }
 }

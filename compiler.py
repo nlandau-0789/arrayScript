@@ -296,22 +296,22 @@ def p_line_stmt(p):
 
 def p_item(p):
     '''
-    item : expr '[' arguments ']'
+    item : expr '[' expr ']'
     '''
     # print(("item", p[1], p[3]))
-    p[0] = ("item", p[1], p[3])
+    p[0] = ("call", "item", [p[1], p[3]])
 
 def p_simple_slice(p):
     '''
-    simple_slice : expr '[' arguments ':' arguments ']'
+    simple_slice : expr '[' expr ':' expr ']'
     '''
-    p[0] = ("simple_slice", p[1], p[3], p[5])
+    p[0] = ("call", "simple_slice", [p[1], p[3], p[5]])
 
 def p_full_slice(p):
     '''
-    full_slice : expr '[' arguments ':' arguments ':' arguments ']'
+    full_slice : expr '[' expr ':' expr ':' expr ']'
     '''
-    p[0] = ("full_slice", p[1], p[3], p[5], p[7])
+    p[0] = ("call", "full_slice", [p[1], p[3], p[5], p[7]])
 
 def p_listop(p):
     '''

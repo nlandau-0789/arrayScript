@@ -50,7 +50,7 @@ p = [
             ('const', '"S"'),
             ('const', '"s_combinator_2"'),
             ('const', 0),
-            ('const', '"S §{f} §{g} {x}"'),
+            ('const', '"S \\u00a7{f} \\u00a7{g} {x}"'),
         ],
         [
             (
@@ -95,10 +95,19 @@ p = [
                     'operator_add',
                     [
                         (
-                            'simple_slice',
-                            ('var', 'nom'),
-                            [('const', 5)],
-                            [('const', 9)],
+                            'call',
+                            'operator_map',
+                            [
+                                (
+                                    'call',
+                                    'simple_slice',
+                                    [
+                                        ('var', 'nom'),
+                                        ('const', 5),
+                                        ('const', 9),
+                                    ],
+                                ),
+                            ],
                         ),
                         ('call', 'operator_pow', [('const', 90), ('const', 2)]),
                     ],
@@ -189,12 +198,12 @@ p = [
                     (
                         'call',
                         'operator_decr',
-                        [('item', ('var', 'sections'), [('var', 'I')])],
+                        [('call', 'item', [('var', 'sections'), ('var', 'I')])],
                     ),
                     (
                         'call',
                         'operator_incr',
-                        [('item', ('var', 'sections'), [('var', 'J')])],
+                        [('call', 'item', [('var', 'sections'), ('var', 'J')])],
                     ),
                 ],
             ),
@@ -271,6 +280,7 @@ p = [
 ]
 
 from Utils.array_functions import flatten
+from base_compiler import operator
 # import json
 
 def translate(stmt, indent = 0):
@@ -297,8 +307,37 @@ def translate(stmt, indent = 0):
         return "return "+translate(stmt[1], indent+1)
     if stmt[0] == "func":
         return "\t"*indent+"auto " + stmt[1] + "("+ (", ").join(flatten([translate(i, indent+1) for i in stmt[2]])) +"){\n"+"\t"*(indent+1)+(";\n"+"\t"*(indent+1)).join(flatten([translate(i, indent+1) for i in stmt[3]]))+";\n"+"\t"*indent+"}"
-    # if stmt[0] == "operator":
-    #     return stmt[1]
+    if stmt[0] == "operator":
+        i = operator(*(eval(str(v[1])) for v in stmt[1]))
+        return \
+f'''
+template<{", ".join("typename "+chr(65+i) for i in range(i.nb_args-1))}>
+auto {i.__name__}({", ".join(chr(65+i)+" "+chr(97+i) for i in range(i.nb_args-1))})''' + "{\n" + "\t"*(indent+1) + (";\n"+"\t"*(indent+1)).join(flatten([translate(i, indent+1) for i in stmt[2]])) + ";\n" + "\t"*indent + "}"
+    if stmt[0] == "lambda":
+        req = ""
+        return "["+", ".join(req)+"](auto "+ (", auto ").join(flatten([translate(i, indent+1) for i in stmt[1]])) +"){return "+translate(stmt[2], indent+1)+";}"
+    if stmt[0] == "for":
+        program = ""
+        if len(stmt[1]) == 1:
+            program = "for (auto&&"+translate(stmt[1])+ " : "+translate(stmt[2])+"){\n"
+        else :
+            program = "for (auto&&"+"["+", ".join(translate(i) for i in stmt[1])+"] : "+translate(stmt[2])+"){\n"
+        program += "".join("\t"*(indent+1) + (tmp:=translate(i, indent+1)) + ";\n"*(not tmp[-1] in '};')  for i in stmt[3])
+        return program+"\t"*indent+"}"
+    if stmt[0] == "while":
+        pass
+    if stmt[0] == "if":
+        pass
+    if stmt[0] == "elif":
+        pass
+    if stmt[0] == "else":
+        pass
+    if stmt[0] == "del":
+        pass
+    if stmt[0] == "continue":
+        pass
+    if stmt[0] == "break":
+        pass
     return ""
     
 

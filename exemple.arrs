@@ -38,7 +38,7 @@ func dummy(num a){
 }
 
 func dummy2(num a, b; list c){
-    variable = nom[5:9]+90**2
+    variable = nom[5:9][]+90**2
     return Null
 }
 
