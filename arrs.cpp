@@ -7,6 +7,9 @@
 #include <numeric>
 #include <functional>
 #include <type_traits>
+#include <variant>
+#include <cmath>
+#include <arrs.hpp>
 
 namespace arrs {
 
@@ -268,11 +271,11 @@ inline auto operator_greatest(A a, B b){
 }
 namespace types {
 
-// class type_type{
-// public :
-//     type_type(){}
-//     ~type_type(){}
-// };
+class type_type{
+public :
+    type_type(){}
+    ~type_type(){}
+};
 
 class type_num{
 public :
@@ -282,28 +285,32 @@ public :
 
 typedef bool type_bool;
 
-#define type_any auto
+// type_any must be defined using a std::variant of all the types, after precompilations
 
 typedef unsigned long long type_u64;
 typedef unsigned long type_u32;
 typedef unsigned short type_u16;
 typedef unsigned char type_u8;
 
-typedef long long type_u64;
-typedef long type_u32;
-typedef short type_u16;
-typedef char type_u8;
+typedef long long type_i64;
+typedef long type_i32;
+typedef short type_i16;
+typedef char type_i8;
 
 typedef float type_f32;
 typedef double type_f64;
 
-typedef std::string str;
+typedef std::string type_str;
 
-class type_list{
-public :
-    type_list(){}
-    ~type_list(){}
-};
+typedef std::variant<type_u64, type_u32, type_u16, type_u8, type_i64, type_i32, type_i16, type_i8, type_bool, type_str> primitive_type;
+
+// class type_list{
+// private :
+
+// public :
+//     type_list(){}
+//     ~type_list(){}
+// };
 
 class type_tuple{
 public :

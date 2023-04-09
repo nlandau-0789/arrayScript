@@ -1,6 +1,6 @@
 from base_compiler import types, operators, funcs
 
-arrs_h = open("arrs.h", "x", encoding="utf-8")
+arrs_h = open("arrs.hpp", "x", encoding="utf-8")
 
 
 arrs_h.write("""
