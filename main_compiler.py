@@ -3,7 +3,7 @@ from parser_compiler import get_parser
 from translater_compiler import get_translater
 from pprint import pprint
 
-with open("exemple2.arrs", "r", encoding="utf-8") as f:
+with open("exemple.arrs", "r", encoding="utf-8") as f:
     code = f.read().strip()
 
 with open("compiler.py", "w", encoding="utf-8") as f:
@@ -20,10 +20,9 @@ with open("compiler.py", "a", encoding="utf-8") as f:
 # lexer.input(code)
 # pprint(list(lexer))
 
-from compiler import parser
+# from compiler import parser
 
-parser.parse(code)
+# parser.parse(code)
 
-# from compiler import translater
-
-# translater.translate(code)
+from compiler import compile
+compile(code, "exemple.cpp")

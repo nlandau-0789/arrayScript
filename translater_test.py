@@ -45,7 +45,7 @@ def translate(stmt, indent = 0):
         # print(stmt)
         return stmt[0]
     if stmt[0] == "struct":
-        return "\t"*indent + "struct "+ stmt[1][1] +" {\n" + "\t"*(indent+1) + (";\n"+"\t"*(indent+1)).join(flatten([translate(i, indent+1) for i in stmt[2]]))+ "\n" + "\t"*indent + "};"
+        return "\t"*indent + "struct "+ stmt[1][1] +" {\n" + "\t"*(indent+1) + (";\n"+"\t"*(indent+1)).join(flatten([translate(i, indent+1) for i in stmt[2]]))+ ";\n" + "\t"*indent + "};"
     if stmt[0] == "declaration":
         type_ = stmt[1][1]
         return [type_+" "+name[1] for name in stmt[2]]

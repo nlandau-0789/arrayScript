@@ -121,6 +121,14 @@ def t_STRING_DQ(t):
     t.value = json.dumps(eval(t.value))
     return t'''
 
+class Null():
+    match_string = r'Null'
+    tokenizer = rf'''
+def t_Null(t):
+    r"""{match_string}"""
+    t.value = "NULL"
+    return t'''
+
 consts_types = [
     FLOAT,
     NUM,
@@ -129,7 +137,7 @@ consts_types = [
     STRING_SQ,
     STRING_DQ,
     keyword("true"),
-    keyword("Null"),
+    Null,
     keyword("false"),
 ]
 

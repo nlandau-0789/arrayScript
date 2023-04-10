@@ -407,6 +407,6 @@ def p_error(p):
     else:
         print("Syntax error at EOF")
 
-# parser = yacc.yacc(debug=True)
+parser = yacc.yacc(debug=True)
 
 """

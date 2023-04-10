@@ -2,7 +2,7 @@ from ply import *
 from pprint import pprint
 import json
 
-tokens = ('FLOAT', 'NUM', 'STRING_3SQ', 'STRING_3DQ', 'STRING_SQ', 'STRING_DQ', 'true', 'Null', 'false', 'for', 'while', 'if', 'else', 'elif', 'func', 'struct', 'operator', 'return', 'break', 'continue', 'del', 'lambda', 'pass', 'operator_add', 'operator_sub', 'operator_mul', 'operator_div', 'operator_trudiv', 'operator_pow', 'operator_join', 'operator_split', 'operator_scan', 'operator_reduc', 'operator_bitand', 'operator_bitor', 'operator_bitxor', 'operator_bitshiftleft', 'operator_bitshiftright', 'operator_and', 'operator_or', 'operator_xor', 'operator_contains', 'operator_bitnot', 'operator_not', 'operator_incr', 'operator_decr', 'operator_outer', 'operator_inner', 'operator_reverse', 'operator_rotate', 'operator_apply', 'operator_compose', 'operator_over', 'operator_map', 'operator_sorted_incr', 'operator_sorted_decr', 'operator_less_than', 'operator_less_than_equals', 'operator_greater_than', 'operator_greater_than_equals', 'operator_equals', 'operator_not_equals', 'operator_smallest', 'operator_greatest', 'type_type', 'type_num', 'type_bool', 'type_any', 'type_u64', 'type_u32', 'type_u16', 'type_u8', 'type_i64', 'type_i32', 'type_i16', 'type_i8', 'type_f32', 'type_f64', 'type_str', 'type_list', 'type_tuple', 'type_array', 'type_vector', 'type_dict', 'type_generator', 'type_linked_list', 'type_doubly_linked_list', 'type_deque', 'type_heap', 'type_fibonacci_heap', 'type_tree', 'type_trie', 'type_stack', 'type_queue', 'type_binary_search_tree', 'type_bitset', 'type_set', 'type_map', 'type_range', 'VAR', 'NEWLINE')
+tokens = ('FLOAT', 'NUM', 'STRING_3SQ', 'STRING_3DQ', 'STRING_SQ', 'STRING_DQ', 'true', 'Null', 'false', 'for', 'while', 'if', 'else', 'elif', 'func', 'struct', 'operator', 'return', 'break', 'continue', 'del', 'lambda', 'pass', 'operator_add', 'operator_sub', 'operator_mul', 'operator_div', 'operator_trudiv', 'operator_pow', 'operator_join', 'operator_split', 'operator_scan', 'operator_reduc', 'operator_bitand', 'operator_bitor', 'operator_bitxor', 'operator_bitshiftleft', 'operator_bitshiftright', 'operator_and', 'operator_or', 'operator_xor', 'operator_contains', 'operator_bitnot', 'operator_not', 'operator_incr', 'operator_decr', 'operator_outer', 'operator_inner', 'operator_reverse', 'operator_rotate', 'operator_apply', 'operator_compose', 'operator_over', 'operator_map', 'operator_sorted_incr', 'operator_sorted_decr', 'operator_less_than', 'operator_less_than_equals', 'operator_greater_than', 'operator_greater_than_equals', 'operator_equals', 'operator_not_equals', 'operator_smallest', 'operator_greatest', 'type_type', 'type_num', 'type_bool', 'type_any', 'type_u64', 'type_u32', 'type_u16', 'type_u8', 'type_i64', 'type_i32', 'type_i16', 'type_i8', 'type_f32', 'type_f64', 'type_str', 'type_list', 'type_tuple', 'type_array', 'type_vector', 'type_dict', 'type_generator', 'type_linked_list', 'type_doubly_linked_list', 'type_deque', 'type_heap', 'type_fibonacci_heap', 'type_tree', 'type_trie', 'type_stack', 'type_queue', 'type_binary_search_tree', 'type_bitset', 'type_set', 'type_map', 'type_range', 'type_bad_struct', 'type_bad_struct2', 'operator_goodname', 'operator_s_combinator', 'operator_s_combinator_2', 'operator_goodname2', 'VAR', 'NEWLINE')
 
 def t_FLOAT(t):
     r"-?\d+\.\d+"
@@ -34,7 +34,11 @@ def t_STRING_DQ(t):
     t.value = json.dumps(eval(t.value))
     return t
 t_true = r'''true'''
-t_Null = r'''Null'''
+
+def t_Null(t):
+    r"""Null"""
+    t.value = "NULL"
+    return t
 t_false = r'''false'''
 t_for = r'''for'''
 t_while = r'''while'''
@@ -126,8 +130,14 @@ t_type_bitset = r'''bitset'''
 t_type_set = r'''set'''
 t_type_map = r'''map'''
 t_type_range = r'''range'''
+t_type_bad_struct = r'''bad_struct'''
+t_type_bad_struct2 = r'''bad_struct2'''
+t_operator_goodname = r'''op'''
+t_operator_s_combinator = r'''S'''
+t_operator_s_combinator_2 = r'''S'''
+t_operator_goodname2 = r'''op2'''
 
-reserved = {'true': 'true', 'Null': 'Null', 'false': 'false', 'for': 'for', 'while': 'while', 'if': 'if', 'else': 'else', 'elif': 'elif', 'func': 'func', 'struct': 'struct', 'operator': 'operator', 'return': 'return', 'break': 'break', 'continue': 'continue', 'del': 'del', 'lambda': 'lambda', 'pass': 'pass', 'and': 'operator_and', 'or': 'operator_or', 'xor': 'operator_xor', 'in': 'operator_contains', 'not': 'operator_not', 'type': 'type_type', 'num': 'type_num', 'bool': 'type_bool', 'any': 'type_any', 'u64': 'type_u64', 'u32': 'type_u32', 'u16': 'type_u16', 'u8': 'type_u8', 'i64': 'type_i64', 'i32': 'type_i32', 'i16': 'type_i16', 'i8': 'type_i8', 'f32': 'type_f32', 'f64': 'type_f64', 'str': 'type_str', 'list': 'type_list', 'tuple': 'type_tuple', 'array': 'type_array', 'vector': 'type_vector', 'dict': 'type_dict', 'generator': 'type_generator', 'linked_list': 'type_linked_list', 'doubly_linked_list': 'type_doubly_linked_list', 'deque': 'type_deque', 'heap': 'type_heap', 'fibonacci_heap': 'type_fibonacci_heap', 'tree': 'type_tree', 'trie': 'type_trie', 'stack': 'type_stack', 'queue': 'type_queue', 'binary_search_tree': 'type_binary_search_tree', 'bitset': 'type_bitset', 'set': 'type_set', 'map': 'type_map', 'range': 'type_range'}
+reserved = {'true': 'true', 'false': 'false', 'for': 'for', 'while': 'while', 'if': 'if', 'else': 'else', 'elif': 'elif', 'func': 'func', 'struct': 'struct', 'operator': 'operator', 'return': 'return', 'break': 'break', 'continue': 'continue', 'del': 'del', 'lambda': 'lambda', 'pass': 'pass', 'and': 'operator_and', 'or': 'operator_or', 'xor': 'operator_xor', 'in': 'operator_contains', 'not': 'operator_not', 'type': 'type_type', 'num': 'type_num', 'bool': 'type_bool', 'any': 'type_any', 'u64': 'type_u64', 'u32': 'type_u32', 'u16': 'type_u16', 'u8': 'type_u8', 'i64': 'type_i64', 'i32': 'type_i32', 'i16': 'type_i16', 'i8': 'type_i8', 'f32': 'type_f32', 'f64': 'type_f64', 'str': 'type_str', 'list': 'type_list', 'tuple': 'type_tuple', 'array': 'type_array', 'vector': 'type_vector', 'dict': 'type_dict', 'generator': 'type_generator', 'linked_list': 'type_linked_list', 'doubly_linked_list': 'type_doubly_linked_list', 'deque': 'type_deque', 'heap': 'type_heap', 'fibonacci_heap': 'type_fibonacci_heap', 'tree': 'type_tree', 'trie': 'type_trie', 'stack': 'type_stack', 'queue': 'type_queue', 'binary_search_tree': 'type_binary_search_tree', 'bitset': 'type_bitset', 'set': 'type_set', 'map': 'type_map', 'range': 'type_range', 'bad_struct': 'type_bad_struct', 'bad_struct2': 'type_bad_struct2', 'op': 'operator_goodname', 'S': 'operator_s_combinator', 'S': 'operator_s_combinator_2', 'op2': 'operator_goodname2'}
 
 def t_VAR(t):
    r'[a-zA-Z_][a-zA-Z_\d]*'
@@ -175,10 +185,10 @@ lexer = lex.lex()
 #     pprint(list(lexer))
 
 
-precedence = (("left", "="), ('left', 'operator_and', 'operator_or', 'operator_xor', 'operator_contains', 'operator_not', 'operator_less_than', 'operator_less_than_equals', 'operator_greater_than', 'operator_greater_than_equals', 'operator_equals', 'operator_not_equals', 'operator_smallest', 'operator_greatest'), ('left', 'operator_add', 'operator_sub', 'operator_join', 'operator_split', 'operator_bitand', 'operator_bitor', 'operator_bitxor', 'operator_bitshiftleft', 'operator_bitshiftright', 'operator_outer', 'operator_inner'), ('left', 'operator_mul', 'operator_div', 'operator_trudiv'), ('left', 'operator_pow'), ('left', 'operator_scan', 'operator_reduc', 'operator_rotate', 'operator_apply'), ('left', 'operator_bitnot', 'operator_incr', 'operator_decr', 'operator_reverse', 'operator_sorted_incr', 'operator_sorted_decr'), ('left', 'operator_map'), ('left', 'operator_over'), ('left', 'operator_compose'))
+precedence = (("left", "="), ('left', 'operator_and', 'operator_or', 'operator_xor', 'operator_contains', 'operator_not', 'operator_less_than', 'operator_less_than_equals', 'operator_greater_than', 'operator_greater_than_equals', 'operator_equals', 'operator_not_equals', 'operator_smallest', 'operator_greatest', 'operator_s_combinator', 'operator_s_combinator_2'), ('left', 'operator_add', 'operator_sub', 'operator_join', 'operator_split', 'operator_bitand', 'operator_bitor', 'operator_bitxor', 'operator_bitshiftleft', 'operator_bitshiftright', 'operator_outer', 'operator_inner'), ('left', 'operator_mul', 'operator_div', 'operator_trudiv'), ('left', 'operator_pow'), ('left', 'operator_scan', 'operator_reduc', 'operator_rotate', 'operator_apply'), ('left', 'operator_bitnot', 'operator_incr', 'operator_decr', 'operator_reverse', 'operator_sorted_incr', 'operator_sorted_decr', 'operator_goodname'), ('left', 'operator_map'), ('left', 'operator_over'), ('left', 'operator_compose'), ('left', 'operator_goodname2'))
 
 def get_operator_name(symbol):
-    return {'+': 'operator_add', '-': 'operator_sub', '*': 'operator_mul', '//': 'operator_div', '/': 'operator_trudiv', '**': 'operator_pow', '-+-': 'operator_join', '-|-': 'operator_split', '->': 'operator_scan', '/>': 'operator_reduc', '&&': 'operator_bitand', '||': 'operator_bitor', '^': 'operator_bitxor', '<<': 'operator_bitshiftleft', '>>': 'operator_bitshiftright', 'and': 'operator_and', 'or': 'operator_or', 'xor': 'operator_xor', 'in': 'operator_contains', '~': 'operator_bitnot', 'not': 'operator_not', '++': 'operator_incr', '--': 'operator_decr', '+.': 'operator_outer', '-.': 'operator_inner', '<|>': 'operator_reverse', '-o-': 'operator_rotate', '.': 'operator_apply', '::': 'operator_compose', '..': 'operator_over', '[]': 'operator_map', '>_>': 'operator_sorted_incr', '<_<': 'operator_sorted_decr', '<': 'operator_less_than', '<=': 'operator_less_than_equals', '>': 'operator_greater_than', '>=': 'operator_greater_than_equals', '==': 'operator_equals', '!=': 'operator_not_equals', '<?': 'operator_smallest', '>?': 'operator_greatest'}[symbol]
+    return {'+': 'operator_add', '-': 'operator_sub', '*': 'operator_mul', '//': 'operator_div', '/': 'operator_trudiv', '**': 'operator_pow', '-+-': 'operator_join', '-|-': 'operator_split', '->': 'operator_scan', '/>': 'operator_reduc', '&&': 'operator_bitand', '||': 'operator_bitor', '^': 'operator_bitxor', '<<': 'operator_bitshiftleft', '>>': 'operator_bitshiftright', 'and': 'operator_and', 'or': 'operator_or', 'xor': 'operator_xor', 'in': 'operator_contains', '~': 'operator_bitnot', 'not': 'operator_not', '++': 'operator_incr', '--': 'operator_decr', '+.': 'operator_outer', '-.': 'operator_inner', '<|>': 'operator_reverse', '-o-': 'operator_rotate', '.': 'operator_apply', '::': 'operator_compose', '..': 'operator_over', '[]': 'operator_map', '>_>': 'operator_sorted_incr', '<_<': 'operator_sorted_decr', '<': 'operator_less_than', '<=': 'operator_less_than_equals', '>': 'operator_greater_than', '>=': 'operator_greater_than_equals', '==': 'operator_equals', '!=': 'operator_not_equals', '<?': 'operator_smallest', '>?': 'operator_greatest', 'op': 'operator_goodname', 'S': 'operator_s_combinator_2', 'op2': 'operator_goodname2'}[symbol]
 
 start = 'program'
 
@@ -276,6 +286,8 @@ def p_TYPE(p):
          | type_set
          | type_map
          | type_range
+         | type_bad_struct
+         | type_bad_struct2
     '''
     p[0] = ("type", p[1])
 
@@ -819,6 +831,38 @@ def p_operator_greatest(p):
     p[0] = ('call', 'operator_greatest', [p[1], p[3]])
 
 
+def p_operator_goodname(p):
+    '''
+    expr : expr operator_goodname expr
+    '''
+    # print("op", p.lexer.lineno)
+    p[0] = ('call', 'operator_goodname', [p[1], p[3]])
+
+
+def p_operator_s_combinator(p):
+    '''
+    expr : operator_s_combinator expr expr expr
+    '''
+    # print("S", p.lexer.lineno)
+    p[0] = ('call', 'operator_s_combinator', [p[2], p[3], p[4]])
+
+
+def p_operator_s_combinator_2(p):
+    '''
+    expr : operator_s_combinator_2 OPERATOR OPERATOR expr
+    '''
+    # print("S", p.lexer.lineno)
+    p[0] = ('call', 'operator_s_combinator_2', [p[2], p[3], p[4]])
+
+
+def p_operator_goodname2(p):
+    '''
+    expr : operator_goodname2 expr
+    '''
+    # print("op2", p.lexer.lineno)
+    p[0] = ('call', 'operator_goodname2', [p[2]])
+
+
 
 def p_var(p):
     '''
@@ -864,6 +908,8 @@ def p_return_val(p):
                | type_set '(' arguments ')'
                | type_map '(' arguments ')'
                | type_range '(' arguments ')'
+               | type_bad_struct '(' arguments ')'
+               | type_bad_struct2 '(' arguments ')'
                | VAR '(' arguments ')'
     '''
     # print("return value", p.lexer.lineno)
@@ -964,6 +1010,10 @@ def p_OPERATOR(p):
          | operator_not_equals
          | operator_smallest
          | operator_greatest
+         | operator_goodname
+         | operator_s_combinator
+         | operator_s_combinator_2
+         | operator_goodname2
     '''
     p[0] = ("var", get_operator_name(p[1]))
 
@@ -975,28 +1025,92 @@ def p_error(p):
     else:
         print("Syntax error at EOF")
 
-# parser = yacc.yacc(debug=True)
+parser = yacc.yacc(debug=True)
 
 
 
-def translate(stmt):
-    pass
+from Utils.array_functions import flatten
+from base_compiler import operator
+# import json
+
+def translate(stmt, indent = 0):
+    if len(stmt) == 1:
+        # print(stmt)
+        return stmt[0]
+    if stmt[0] == "struct":
+        return "\t"*indent + "struct "+ stmt[1][1] +" {\n" + "\t"*(indent+1) + (";\n"+"\t"*(indent+1)).join(flatten([translate(i, indent+1) for i in stmt[2]]))+ ";\n" + "\t"*indent + "};"
+    if stmt[0] == "declaration":
+        type_ = stmt[1][1]
+        return [type_+" "+name[1] for name in stmt[2]]
+    if stmt[0] == "call":
+        # return "\t"*indent + stmt[1] + "(" + ", ".join(flatten([translate(i, indent+1) for i in stmt[2]])) + ")"
+        if stmt[1] == "operator_apply":
+            stmt[2][1][2].insert(0, stmt[2][0])
+            return translate(stmt[2][1])
+        return stmt[1] + "(" + ", ".join(flatten([translate(i, indent+1) for i in stmt[2]])) + ")"
+    if stmt[0] == "const":
+        return str(stmt[1])
+    if stmt[0] == "assign":
+        if len(stmt[1]) == 1:
+            return "auto " + translate(stmt[1][0], indent+1) + " = " + translate(stmt[2], indent+1)
+        return "auto tmp = " + translate(stmt[2], indent+1) + "; auto " + "; auto ".join(translate(i, indent+1)+" = temp["+ str(idx) +"]" for idx, i in enumerate(stmt[1]))
+    if stmt[0] == "var":
+        return stmt[1]
+    if stmt[0] == "return":
+        return "return "+translate(stmt[1], indent+1)
+    if stmt[0] == "func":
+        return "\t"*indent+"auto " + stmt[1] + "("+ (", ").join(flatten([translate(i, indent+1) for i in stmt[2]])) +"){\n"+"\t"*(indent+1)+(";\n"+"\t"*(indent+1)).join(flatten([translate(i, indent+1) for i in stmt[3]]))+";\n"+"\t"*indent+"}"
+    if stmt[0] == "operator":
+        op = operator(*(eval(str(v[1])) for v in stmt[1]))
+        return \
+f'''
+template<{", ".join("typename "+chr(65+i) for i in range(op.nb_args-1))}>
+auto {op.__name__}({", ".join(chr(65+i)+" "+op.args[i] for i in range(op.nb_args-1))})''' + "{\n" + "\t"*(indent+1) + (";\n"+"\t"*(indent+1)).join(flatten([translate(i, indent+1) for i in stmt[2]])) + ";\n" + "\t"*indent + "}"
+    if stmt[0] == "lambda":
+        req = ""
+        return "["+", ".join(req)+"](auto "+ (", auto ").join(flatten([translate(i, indent+1) for i in stmt[1]])) +"){return "+translate(stmt[2], indent+1)+";}"
+    if stmt[0] == "for":
+        program = ""
+        if len(stmt[1]) == 1:
+            program = "for (auto&& "+translate(stmt[1][0])+ " : "+translate(stmt[2])+"){\n"
+        else :
+            program = "for (auto&& "+"["+", ".join(translate(i) for i in stmt[1])+"] : "+translate(stmt[2])+"){\n"
+        program += "\n".join("\t"*(indent+1) + (tmp:=translate(i, indent+1)) + ";\n"*(len(tmp) and (not tmp[-1] in '};')) for i in stmt[3])
+        return program+("\n" if program[-1] == "}" else "") + "\t"*indent+"}"
+    if stmt[0] == "while":
+        program = "while ("+translate(stmt[1])+"){\n"
+        program += "\n".join("\t"*(indent+1) + (tmp:=translate(i, indent+1)) + ";\n"*(len(tmp) and (not tmp[-1] in '};')) for i in stmt[2])
+        return program+("\n" if program[-1] == "}" else "") + "\t"*indent+"}"
+    if stmt[0] == "if":
+        program = "if ("+translate(stmt[1])+"){\n"
+        program += "\n".join("\t"*(indent+1) + (tmp:=translate(i, indent+1)) + ";\n"*(len(tmp) and (not tmp[-1] in '};')) for i in stmt[2])
+        return program+("\n" if program[-1] == "}" else "") + "\t"*indent+"}"
+    if stmt[0] == "elif":
+        program = "else if ("+translate(stmt[1])+"){\n"
+        program += "\n".join("\t"*(indent+1) + (tmp:=translate(i, indent+1)) + ";\n"*(len(tmp) and (not tmp[-1] in '};')) for i in stmt[2])
+        return program+("\n" if program[-1] == "}" else "") + "\t"*indent+"}"
+    if stmt[0] == "else":
+        program = "else {\n"
+        program += "\n".join("\t"*(indent+1) + (tmp:=translate(i, indent+1)) + ";\n"*(len(tmp) and (not tmp[-1] in '};')) for i in stmt[1])
+        return program+("\n" if program[-1] == "}" else "") + "\t"*indent+"}"
+    # if stmt[0] == "del":
+    #     pass
+    return ""
+    
+
 
 def run(p):
-    print(p)
-    # program = "#include <arrs.cpp>\n\n"
-    # for i in p:
-    #     program += translate(i)
-    # print(program)
+    # print(p)
+    program = "#include <arrs.cpp>\n\nusing namespace arrs;\nusing namespace operators;\nusing namespace types;\nusing namespace funcs;\n\n"
+    for i in p:
+        program += translate(i)
+        program += ";"*(not program[-1] in '};') 
+        program += "\n\n"
+    with open(file_destination, "w", encoding="utf-8") as f:
+        f.write(program)
 
-parser = yacc.yacc(debug=True)
+def compile(code, filename):
+    global file_destination
+    file_destination = filename
+    parser.parse(code)
     
-    
-
-
-
-
-
-
-
-
