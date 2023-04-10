@@ -5,16 +5,16 @@ using namespace operators;
 using namespace types;
 using namespace funcs;
 
-struct bad_struct {
-	num a;
-	num b;
-	list c;
+struct type_bad_struct {
+	type_num a;
+	type_num b;
+	type_list c;
 };
 
-struct bad_struct2 {
-	num a;
-	num b;
-	list c;
+struct type_bad_struct2 {
+	type_num a;
+	type_num b;
+	type_list c;
 };
 
 
@@ -41,11 +41,11 @@ auto operator_goodname2(A a){
 	return NULL;
 }
 
-auto dummy(num a){
+auto dummy(type_num a){
 	return NULL;
 }
 
-auto dummy2(num a, num b, list c){
+auto dummy2(type_num a, type_num b, type_list c){
 	auto variable = operator_add(operator_map(simple_slice(nom, 5, 9)), operator_pow(90, 2));
 	return NULL;
 }
@@ -55,8 +55,8 @@ auto a = operator_add(1, operator_mul(3, operator_add(5, operator_compose(input,
 auto main(){
 	auto N = operator_compose(make_num, input());
 	auto R = operator_compose(make_num, input());
-	auto sections = array(N, make_num);
-	for (auto&& i : range(R)){
+	auto sections = make_array(N, make_num);
+	for (auto&& i : make_range(R)){
 		auto tmp = operator_over(make_num, operator_compose(split, input())); auto I = temp[0]; auto J = temp[1];
 
 		operator_decr(item(sections, I));

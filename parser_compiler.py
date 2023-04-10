@@ -27,13 +27,16 @@ def format_operators():
     return "\n         | ".join(x.__name__ for x in operators)
 
 def format_func_ret_val():
-    return "\n               | ".join(map(lambda x : f"{x.__name__} '(' arguments ')'", types+funcs))
+    return "".join(map(lambda x : f"\n               | {x.__name__} '(' arguments ')'", funcs))
+
+def format_type_ret_val():
+    return "\n               | ".join(map(lambda x : f"{x.__name__} '(' arguments ')'", types))
 
 def format_consts_types():
     return "\n              | ".join(x.__name__ for x in consts_types)
 
-def format_types_and_funcs_as_args():
-    return "\n              | ".join(x.__name__ for x in types+funcs)
+# def format_types_and_funcs_as_args():
+#     return "\n              | ".join(x.__name__ for x in types+funcs)
 
 def format_decl_stmt():
     return "\n                     | ".join(f"{x.__name__} comma_separated_names" for x in types)
@@ -335,11 +338,17 @@ def p_var(p):
 
 def p_return_val(p):
     '''
-    return_val : {format_func_ret_val()}
-               | VAR '(' arguments ')'
+    return_val : VAR '(' arguments ')'{format_func_ret_val()}
     '''
     # print("return value", p.lexer.lineno)
     p[0] = ("call", p[1], p[3])
+
+def p_instantiation(p):
+    '''
+    return_val : {format_type_ret_val()}
+    '''
+    # print("return value", p.lexer.lineno)
+    p[0] = ("call", ("make_"+p[1]), p[3])
 
 def p_expr(p):
     '''
@@ -407,6 +416,6 @@ def p_error(p):
     else:
         print("Syntax error at EOF")
 
-parser = yacc.yacc(debug=True)
+parser = yacc.yacc()
 
 """
