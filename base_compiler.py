@@ -144,6 +144,7 @@ class operator():
         state = 0
         self.nb_args = 0
         found_symbol = False
+        self.args = []
         def check_symbol():
             nonlocal buffer, found_symbol
             if buffer:
@@ -175,6 +176,7 @@ class operator():
                 state = 0
                 self.nb_args += 1
                 self.return_value.append(self.nb_args)
+                self.args.append(buffer)
                 buffer = ""
                 continue
             if i == "§":

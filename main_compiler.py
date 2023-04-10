@@ -3,7 +3,7 @@ from parser_compiler import get_parser
 from translater_compiler import get_translater
 from pprint import pprint
 
-with open("exemple.arrs", "r", encoding="utf-8") as f:
+with open("exemple2.arrs", "r", encoding="utf-8") as f:
     code = f.read().strip()
 
 with open("compiler.py", "w", encoding="utf-8") as f:

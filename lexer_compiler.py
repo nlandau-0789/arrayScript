@@ -43,7 +43,7 @@ def t_lbrace(t):
     return t
 
 def t_rbrace(t):
-    r'\n*\}'
+    r'(\n|\ )*\}'
     t.type = '}'
     t.lexer.lineno += t.value.count("\n")
     return t

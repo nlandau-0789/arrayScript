@@ -2,7 +2,7 @@ from ply import *
 from pprint import pprint
 import json
 
-tokens = ('FLOAT', 'NUM', 'STRING_3SQ', 'STRING_3DQ', 'STRING_SQ', 'STRING_DQ', 'true', 'Null', 'false', 'for', 'while', 'if', 'else', 'elif', 'func', 'struct', 'operator', 'return', 'break', 'continue', 'del', 'lambda', 'pass', 'operator_add', 'operator_sub', 'operator_mul', 'operator_div', 'operator_trudiv', 'operator_pow', 'operator_join', 'operator_split', 'operator_scan', 'operator_reduc', 'operator_bitand', 'operator_bitor', 'operator_bitxor', 'operator_bitshiftleft', 'operator_bitshiftright', 'operator_and', 'operator_or', 'operator_xor', 'operator_contains', 'operator_bitnot', 'operator_not', 'operator_incr', 'operator_decr', 'operator_outer', 'operator_inner', 'operator_reverse', 'operator_rotate', 'operator_apply', 'operator_compose', 'operator_over', 'operator_map', 'operator_sorted_incr', 'operator_sorted_decr', 'operator_less_than', 'operator_less_than_equals', 'operator_greater_than', 'operator_greater_than_equals', 'operator_equals', 'operator_not_equals', 'operator_smallest', 'operator_greatest', 'type_type', 'type_num', 'type_bool', 'type_any', 'type_u64', 'type_u32', 'type_u16', 'type_u8', 'type_i64', 'type_i32', 'type_i16', 'type_i8', 'type_f32', 'type_f64', 'type_str', 'type_list', 'type_tuple', 'type_array', 'type_vector', 'type_dict', 'type_generator', 'type_linked_list', 'type_doubly_linked_list', 'type_deque', 'type_heap', 'type_fibonacci_heap', 'type_tree', 'type_trie', 'type_stack', 'type_queue', 'type_binary_search_tree', 'type_bitset', 'type_set', 'type_map', 'type_range', 'type_bad_struct', 'type_bad_struct2', 'operator_goodname', 'operator_s_combinator', 'operator_s_combinator_2', 'operator_goodname2', 'VAR', 'NEWLINE')
+tokens = ('FLOAT', 'NUM', 'STRING_3SQ', 'STRING_3DQ', 'STRING_SQ', 'STRING_DQ', 'true', 'Null', 'false', 'for', 'while', 'if', 'else', 'elif', 'func', 'struct', 'operator', 'return', 'break', 'continue', 'del', 'lambda', 'pass', 'operator_add', 'operator_sub', 'operator_mul', 'operator_div', 'operator_trudiv', 'operator_pow', 'operator_join', 'operator_split', 'operator_scan', 'operator_reduc', 'operator_bitand', 'operator_bitor', 'operator_bitxor', 'operator_bitshiftleft', 'operator_bitshiftright', 'operator_and', 'operator_or', 'operator_xor', 'operator_contains', 'operator_bitnot', 'operator_not', 'operator_incr', 'operator_decr', 'operator_outer', 'operator_inner', 'operator_reverse', 'operator_rotate', 'operator_apply', 'operator_compose', 'operator_over', 'operator_map', 'operator_sorted_incr', 'operator_sorted_decr', 'operator_less_than', 'operator_less_than_equals', 'operator_greater_than', 'operator_greater_than_equals', 'operator_equals', 'operator_not_equals', 'operator_smallest', 'operator_greatest', 'type_type', 'type_num', 'type_bool', 'type_any', 'type_u64', 'type_u32', 'type_u16', 'type_u8', 'type_i64', 'type_i32', 'type_i16', 'type_i8', 'type_f32', 'type_f64', 'type_str', 'type_list', 'type_tuple', 'type_array', 'type_vector', 'type_dict', 'type_generator', 'type_linked_list', 'type_doubly_linked_list', 'type_deque', 'type_heap', 'type_fibonacci_heap', 'type_tree', 'type_trie', 'type_stack', 'type_queue', 'type_binary_search_tree', 'type_bitset', 'type_set', 'type_map', 'type_range', 'VAR', 'NEWLINE')
 
 def t_FLOAT(t):
     r"-?\d+\.\d+"
@@ -126,14 +126,8 @@ t_type_bitset = r'''bitset'''
 t_type_set = r'''set'''
 t_type_map = r'''map'''
 t_type_range = r'''range'''
-t_type_bad_struct = r'''bad_struct'''
-t_type_bad_struct2 = r'''bad_struct2'''
-t_operator_goodname = r'''op'''
-t_operator_s_combinator = r'''S'''
-t_operator_s_combinator_2 = r'''S'''
-t_operator_goodname2 = r'''op2'''
 
-reserved = {'true': 'true', 'Null': 'Null', 'false': 'false', 'for': 'for', 'while': 'while', 'if': 'if', 'else': 'else', 'elif': 'elif', 'func': 'func', 'struct': 'struct', 'operator': 'operator', 'return': 'return', 'break': 'break', 'continue': 'continue', 'del': 'del', 'lambda': 'lambda', 'pass': 'pass', 'and': 'operator_and', 'or': 'operator_or', 'xor': 'operator_xor', 'in': 'operator_contains', 'not': 'operator_not', 'type': 'type_type', 'num': 'type_num', 'bool': 'type_bool', 'any': 'type_any', 'u64': 'type_u64', 'u32': 'type_u32', 'u16': 'type_u16', 'u8': 'type_u8', 'i64': 'type_i64', 'i32': 'type_i32', 'i16': 'type_i16', 'i8': 'type_i8', 'f32': 'type_f32', 'f64': 'type_f64', 'str': 'type_str', 'list': 'type_list', 'tuple': 'type_tuple', 'array': 'type_array', 'vector': 'type_vector', 'dict': 'type_dict', 'generator': 'type_generator', 'linked_list': 'type_linked_list', 'doubly_linked_list': 'type_doubly_linked_list', 'deque': 'type_deque', 'heap': 'type_heap', 'fibonacci_heap': 'type_fibonacci_heap', 'tree': 'type_tree', 'trie': 'type_trie', 'stack': 'type_stack', 'queue': 'type_queue', 'binary_search_tree': 'type_binary_search_tree', 'bitset': 'type_bitset', 'set': 'type_set', 'map': 'type_map', 'range': 'type_range', 'bad_struct': 'type_bad_struct', 'bad_struct2': 'type_bad_struct2', 'op': 'operator_goodname', 'S': 'operator_s_combinator', 'S': 'operator_s_combinator_2', 'op2': 'operator_goodname2'}
+reserved = {'true': 'true', 'Null': 'Null', 'false': 'false', 'for': 'for', 'while': 'while', 'if': 'if', 'else': 'else', 'elif': 'elif', 'func': 'func', 'struct': 'struct', 'operator': 'operator', 'return': 'return', 'break': 'break', 'continue': 'continue', 'del': 'del', 'lambda': 'lambda', 'pass': 'pass', 'and': 'operator_and', 'or': 'operator_or', 'xor': 'operator_xor', 'in': 'operator_contains', 'not': 'operator_not', 'type': 'type_type', 'num': 'type_num', 'bool': 'type_bool', 'any': 'type_any', 'u64': 'type_u64', 'u32': 'type_u32', 'u16': 'type_u16', 'u8': 'type_u8', 'i64': 'type_i64', 'i32': 'type_i32', 'i16': 'type_i16', 'i8': 'type_i8', 'f32': 'type_f32', 'f64': 'type_f64', 'str': 'type_str', 'list': 'type_list', 'tuple': 'type_tuple', 'array': 'type_array', 'vector': 'type_vector', 'dict': 'type_dict', 'generator': 'type_generator', 'linked_list': 'type_linked_list', 'doubly_linked_list': 'type_doubly_linked_list', 'deque': 'type_deque', 'heap': 'type_heap', 'fibonacci_heap': 'type_fibonacci_heap', 'tree': 'type_tree', 'trie': 'type_trie', 'stack': 'type_stack', 'queue': 'type_queue', 'binary_search_tree': 'type_binary_search_tree', 'bitset': 'type_bitset', 'set': 'type_set', 'map': 'type_map', 'range': 'type_range'}
 
 def t_VAR(t):
    r'[a-zA-Z_][a-zA-Z_\d]*'
@@ -155,7 +149,7 @@ def t_lbrace(t):
     return t
 
 def t_rbrace(t):
-    r'\n*\}'
+    r'(\n|\ )*\}'
     t.type = '}'
     t.lexer.lineno += t.value.count("\n")
     return t
@@ -181,10 +175,10 @@ lexer = lex.lex()
 #     pprint(list(lexer))
 
 
-precedence = (("left", "="), ('left', 'operator_and', 'operator_or', 'operator_xor', 'operator_contains', 'operator_not', 'operator_less_than', 'operator_less_than_equals', 'operator_greater_than', 'operator_greater_than_equals', 'operator_equals', 'operator_not_equals', 'operator_smallest', 'operator_greatest', 'operator_s_combinator', 'operator_s_combinator_2'), ('left', 'operator_add', 'operator_sub', 'operator_join', 'operator_split', 'operator_bitand', 'operator_bitor', 'operator_bitxor', 'operator_bitshiftleft', 'operator_bitshiftright', 'operator_outer', 'operator_inner'), ('left', 'operator_mul', 'operator_div', 'operator_trudiv'), ('left', 'operator_pow'), ('left', 'operator_scan', 'operator_reduc', 'operator_rotate', 'operator_apply'), ('left', 'operator_bitnot', 'operator_incr', 'operator_decr', 'operator_reverse', 'operator_sorted_incr', 'operator_sorted_decr', 'operator_goodname'), ('left', 'operator_map'), ('left', 'operator_over'), ('left', 'operator_compose'), ('left', 'operator_goodname2'))
+precedence = (("left", "="), ('left', 'operator_and', 'operator_or', 'operator_xor', 'operator_contains', 'operator_not', 'operator_less_than', 'operator_less_than_equals', 'operator_greater_than', 'operator_greater_than_equals', 'operator_equals', 'operator_not_equals', 'operator_smallest', 'operator_greatest'), ('left', 'operator_add', 'operator_sub', 'operator_join', 'operator_split', 'operator_bitand', 'operator_bitor', 'operator_bitxor', 'operator_bitshiftleft', 'operator_bitshiftright', 'operator_outer', 'operator_inner'), ('left', 'operator_mul', 'operator_div', 'operator_trudiv'), ('left', 'operator_pow'), ('left', 'operator_scan', 'operator_reduc', 'operator_rotate', 'operator_apply'), ('left', 'operator_bitnot', 'operator_incr', 'operator_decr', 'operator_reverse', 'operator_sorted_incr', 'operator_sorted_decr'), ('left', 'operator_map'), ('left', 'operator_over'), ('left', 'operator_compose'))
 
 def get_operator_name(symbol):
-    return {'+': 'operator_add', '-': 'operator_sub', '*': 'operator_mul', '//': 'operator_div', '/': 'operator_trudiv', '**': 'operator_pow', '-+-': 'operator_join', '-|-': 'operator_split', '->': 'operator_scan', '/>': 'operator_reduc', '&&': 'operator_bitand', '||': 'operator_bitor', '^': 'operator_bitxor', '<<': 'operator_bitshiftleft', '>>': 'operator_bitshiftright', 'and': 'operator_and', 'or': 'operator_or', 'xor': 'operator_xor', 'in': 'operator_contains', '~': 'operator_bitnot', 'not': 'operator_not', '++': 'operator_incr', '--': 'operator_decr', '+.': 'operator_outer', '-.': 'operator_inner', '<|>': 'operator_reverse', '-o-': 'operator_rotate', '.': 'operator_apply', '::': 'operator_compose', '..': 'operator_over', '[]': 'operator_map', '>_>': 'operator_sorted_incr', '<_<': 'operator_sorted_decr', '<': 'operator_less_than', '<=': 'operator_less_than_equals', '>': 'operator_greater_than', '>=': 'operator_greater_than_equals', '==': 'operator_equals', '!=': 'operator_not_equals', '<?': 'operator_smallest', '>?': 'operator_greatest', 'op': 'operator_goodname', 'S': 'operator_s_combinator_2', 'op2': 'operator_goodname2'}[symbol]
+    return {'+': 'operator_add', '-': 'operator_sub', '*': 'operator_mul', '//': 'operator_div', '/': 'operator_trudiv', '**': 'operator_pow', '-+-': 'operator_join', '-|-': 'operator_split', '->': 'operator_scan', '/>': 'operator_reduc', '&&': 'operator_bitand', '||': 'operator_bitor', '^': 'operator_bitxor', '<<': 'operator_bitshiftleft', '>>': 'operator_bitshiftright', 'and': 'operator_and', 'or': 'operator_or', 'xor': 'operator_xor', 'in': 'operator_contains', '~': 'operator_bitnot', 'not': 'operator_not', '++': 'operator_incr', '--': 'operator_decr', '+.': 'operator_outer', '-.': 'operator_inner', '<|>': 'operator_reverse', '-o-': 'operator_rotate', '.': 'operator_apply', '::': 'operator_compose', '..': 'operator_over', '[]': 'operator_map', '>_>': 'operator_sorted_incr', '<_<': 'operator_sorted_decr', '<': 'operator_less_than', '<=': 'operator_less_than_equals', '>': 'operator_greater_than', '>=': 'operator_greater_than_equals', '==': 'operator_equals', '!=': 'operator_not_equals', '<?': 'operator_smallest', '>?': 'operator_greatest'}[symbol]
 
 start = 'program'
 
@@ -229,6 +223,13 @@ def p_stmts(p):
     '''
     # pprint(("stmts", p[1]+[p[3]]), indent=4)
     p[0] = p[1]+[p[3]]
+
+def p_stmts_after_bloc(p):
+    '''
+    stmts : block_stmt stmts
+    '''
+    # pprint(("stmts", p[1]+[p[3]]), indent=4)
+    p[0] = [p[1]]+p[2]
 
 def p_stmt(p):
     '''
@@ -275,8 +276,6 @@ def p_TYPE(p):
          | type_set
          | type_map
          | type_range
-         | type_bad_struct
-         | type_bad_struct2
     '''
     p[0] = ("type", p[1])
 
@@ -284,11 +283,9 @@ def p_line_stmt(p):
     '''
     line_stmt : return_stmt
               | expr
+              | word_stmt
               | del_stmt
               | declaration_stmt
-              | pass
-              | continue
-              | break
               | assign_stmt
     '''
     # print(p[1])
@@ -375,6 +372,15 @@ def p_block_stmt(p):
     '''
     p[0] = tuple(list(p[1])+[p[3]])
 
+def p_word_stmt(p):
+    '''
+    word_stmt : break
+              | return
+              | continue
+              | pass
+    '''
+    p[0] = (p[1],)
+
 def p_block_stmt_empty(p):
     '''
     block_stmt : block_decl '{' '}'
@@ -386,7 +392,7 @@ def p_block_decl(p):
     '''
     block_decl : for_decl
                | if_decl
-               | else
+               | else_decl
                | elif_decl
                | operator_decl
                | struct_decl
@@ -413,6 +419,12 @@ def p_elif_decl(p):
     elif_decl : elif expr
     '''
     p[0] = ("elif", p[2])
+
+def p_else_decl(p):
+    '''
+    else_decl : else
+    '''
+    p[0] = ("else",)
 
 def p_operator_decl(p):
     '''
@@ -807,38 +819,6 @@ def p_operator_greatest(p):
     p[0] = ('call', 'operator_greatest', [p[1], p[3]])
 
 
-def p_operator_goodname(p):
-    '''
-    expr : expr operator_goodname expr
-    '''
-    # print("op", p.lexer.lineno)
-    p[0] = ('call', 'operator_goodname', [p[1], p[3]])
-
-
-def p_operator_s_combinator(p):
-    '''
-    expr : operator_s_combinator expr expr expr
-    '''
-    # print("S", p.lexer.lineno)
-    p[0] = ('call', 'operator_s_combinator', [p[2], p[3], p[4]])
-
-
-def p_operator_s_combinator_2(p):
-    '''
-    expr : operator_s_combinator_2 OPERATOR OPERATOR expr
-    '''
-    # print("S", p.lexer.lineno)
-    p[0] = ('call', 'operator_s_combinator_2', [p[2], p[3], p[4]])
-
-
-def p_operator_goodname2(p):
-    '''
-    expr : operator_goodname2 expr
-    '''
-    # print("op2", p.lexer.lineno)
-    p[0] = ('call', 'operator_goodname2', [p[2]])
-
-
 
 def p_var(p):
     '''
@@ -884,8 +864,6 @@ def p_return_val(p):
                | type_set '(' arguments ')'
                | type_map '(' arguments ')'
                | type_range '(' arguments ')'
-               | type_bad_struct '(' arguments ')'
-               | type_bad_struct2 '(' arguments ')'
                | VAR '(' arguments ')'
     '''
     # print("return value", p.lexer.lineno)
@@ -986,10 +964,6 @@ def p_OPERATOR(p):
          | operator_not_equals
          | operator_smallest
          | operator_greatest
-         | operator_goodname
-         | operator_s_combinator
-         | operator_s_combinator_2
-         | operator_goodname2
     '''
     p[0] = ("var", get_operator_name(p[1]))
 

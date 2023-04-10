@@ -100,6 +100,13 @@ def p_stmts(p):
     # pprint(("stmts", p[1]+[p[3]]), indent=4)
     p[0] = p[1]+[p[3]]
 
+def p_stmts_after_bloc(p):
+    '''
+    stmts : block_stmt stmts
+    '''
+    # pprint(("stmts", p[1]+[p[3]]), indent=4)
+    p[0] = [p[1]]+p[2]
+
 def p_stmt(p):
     '''
     stmt : line_stmt
@@ -118,11 +125,9 @@ def p_line_stmt(p):
     '''
     line_stmt : return_stmt
               | expr
+              | word_stmt
               | del_stmt
               | declaration_stmt
-              | pass
-              | continue
-              | break
               | assign_stmt
     '''
     # print(p[1])
@@ -209,6 +214,15 @@ def p_block_stmt(p):
     '''
     p[0] = tuple(list(p[1])+[p[3]])
 
+def p_word_stmt(p):
+    '''
+    word_stmt : break
+              | return
+              | continue
+              | pass
+    '''
+    p[0] = (p[1],)
+
 def p_block_stmt_empty(p):
     '''
     block_stmt : block_decl '{{' '}}'
@@ -220,7 +234,7 @@ def p_block_decl(p):
     '''
     block_decl : for_decl
                | if_decl
-               | else
+               | else_decl
                | elif_decl
                | operator_decl
                | struct_decl
@@ -247,6 +261,12 @@ def p_elif_decl(p):
     elif_decl : elif expr
     '''
     p[0] = ("elif", p[2])
+
+def p_else_decl(p):
+    '''
+    else_decl : else
+    '''
+    p[0] = ("else",)
 
 def p_operator_decl(p):
     '''
