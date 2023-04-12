@@ -8,7 +8,15 @@ def get_translater(code):
     return \
 r"""
 
-from Utils.array_functions import flatten
+def flatten(array):
+    if not isinstance(array, list):
+        return [array]
+    res = []
+    for i in array:
+        for j in flatten(i): 
+            res.append(j)
+    return res
+
 from base_compiler import operator
 # import json
 
